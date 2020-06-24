@@ -5,4 +5,5 @@ command:
 
 ```bash
 mvn package appengine:run
+mvn packgae appengine:deploy
 ```
