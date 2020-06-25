@@ -1,42 +1,55 @@
+/* General */
 * {
   font-family: Roboto;
   font-weight: 300;
 }
+
 #content {
+  border: 1px solid #bdbdbd;
+  border-radius: 10px;
   margin-left: auto;
   margin-right: auto;
   width: 85%;
-  border: 1px solid #bdbdbd;
-  border-radius: 10px;
 }
 
+/* Header */
 header {
   background-color: #3F51B5;
-  padding: 25px;
   margin-bottom: 30px;
+  padding: 25px;
 }
 
 header h1 {
-  margin-left: 23%;
   color: #fff;
   font-weight: 200;
   font-size: 200%;
+  margin-left: 23%;
   position: relative;
 }
 
+header img{
+  border-radius: 50%;
+  float: right;
+  height: 150px;
+  position: relative;
+  right: 10%;
+  width: 150px;
+}
+
+/* Menu navigation bar */
 #menu {
   margin-left: 15px;
 }
 
 #menu li{
-  margin-left: 5%;
   display: inline;
+  margin-left: 5%;
 }
 
 #menu li a{
   color: white;
-  text-align: center;
   padding: 14px 16px;
+  text-align: center;
   text-decoration: none;
 }
 
@@ -44,22 +57,14 @@ header h1 {
   color: #c5cae9;
 }
 
-header img{
-  position: relative;
-  float: right;
-  right: 10%;
-  border-radius: 50%;
-  width: 150px;
-  height: 150px;
-}
-
+/* Article section */
 article {
+  border: 1px solid #bdbdbd;
+  border-radius: 10px;
   margin-left: 10%;
   margin-right: 10%;
   margin-bottom: 30px;
   padding: 2%;
-  border: 1px solid #bdbdbd;
-  border-radius: 10px;
 }
 
 article h2{
@@ -72,22 +77,23 @@ article h3{
 }
 
 #social li a{
-  text-decoration: none;
   color: #303f9f;
+  text-decoration: none;
 }
 
 #social li a:hover{
-  text-decoration: underline;
   color: #212121;
+  text-decoration: underline;
 }
 
+/* Image Gallery */
 #img-gallery #section {
   border: 1px solid #bdbdbd;
   border-radius: 10px;
   display: inline-block;
-  text-align: center;
   margin-right: 4%;
   margin-bottom: 4%;
+  text-align: center;
 }
 
 #img-gallery #section p {
@@ -95,10 +101,10 @@ article h3{
 }
 
 #img-gallery #section img{
-  width: 50ex;
+  border-radius: 5%;
   height: auto;
   margin-left: auto;
   margin-right: auto;
   padding: 10px;
-  border-radius: 5%;
+  width: 50ex;
 }
