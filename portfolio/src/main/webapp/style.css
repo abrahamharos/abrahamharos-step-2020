@@ -1,9 +1,62 @@
+* {
+  font-family: Roboto;
+}
 #content {
   margin-left: auto;
   margin-right: auto;
-  width: 650px;
+  width: 85%;
+  border: 1px solid #bdbdbd;
+  border-radius: 10px;
 }
 
-#greeting-container {
-  margin-top: 20px;
+header {
+  background-color: #3F51B5;
+  padding: 25px;
+  margin-bottom: 30px;
+}
+
+header h1 {
+  margin-left: 23%;
+  color: #fff;
+  font-weight: 200;
+  font-size: 200%;
+  position: relative;
+}
+
+#menu {
+  margin-left: 15px;
+}
+
+#menu li{
+  margin-left: 5%;
+  display: inline;
+}
+
+#menu li a{
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+#menu li a:hover{
+  color: #c5cae9;
+}
+
+header img{
+  position: relative;
+  float: right;
+  right: 10%;
+  border-radius: 50%;
+  width: 150px;
+  height: 150px;
+}
+
+article {
+  margin-left: 10%;
+  margin-right: 10%;
+  margin-bottom: 30px;
+  padding: 5% 10% 5% 10%;
+  border: 1px solid #bdbdbd;
+  border-radius: 10px;
 }
