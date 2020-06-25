@@ -1,5 +1,6 @@
 * {
   font-family: Roboto;
+  font-weight: 300;
 }
 #content {
   margin-left: auto;
@@ -56,7 +57,48 @@ article {
   margin-left: 10%;
   margin-right: 10%;
   margin-bottom: 30px;
-  padding: 5% 10% 5% 10%;
+  padding: 2%;
   border: 1px solid #bdbdbd;
   border-radius: 10px;
+}
+
+article h2{
+  font-weight: 500;
+}
+
+
+article h3{
+  font-weight: 400;
+}
+
+#social li a{
+  text-decoration: none;
+  color: #303f9f;
+}
+
+#social li a:hover{
+  text-decoration: underline;
+  color: #212121;
+}
+
+#img-gallery #section {
+  border: 1px solid #bdbdbd;
+  border-radius: 10px;
+  display: inline-block;
+  text-align: center;
+  margin-right: 4%;
+  margin-bottom: 4%;
+}
+
+#img-gallery #section p {
+  font-weight: 400;
+}
+
+#img-gallery #section img{
+  width: 50ex;
+  height: auto;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 10px;
+  border-radius: 5%;
 }
