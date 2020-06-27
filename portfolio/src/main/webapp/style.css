@@ -1,7 +1,7 @@
 /* General */
 * {
   font-family: Roboto;
-  font-weight: 300;
+  font-weight: regular;
 }
 
 #content {
@@ -61,6 +61,7 @@ header img{
 article {
   border: 1px solid #bdbdbd;
   border-radius: 10px;
+  line-height: 1.5;
   margin-left: 10%;
   margin-right: 10%;
   margin-bottom: 30px;
@@ -100,11 +101,24 @@ article h3{
   font-weight: 400;
 }
 
-#img-gallery #section img{
+#img-gallery #section img {
   border-radius: 5%;
   height: auto;
   margin-left: auto;
   margin-right: auto;
   padding: 10px;
   width: 50ex;
+}
+
+#btn-fact {
+  background-color: #303f9f;
+  border-radius: 5%;
+  color: white;
+  font-weight: 500;
+  padding: 10px;
+}
+
+#btn-fact:hover {
+  background-color: #c5cae9;
+  color: black;
 }
