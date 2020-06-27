@@ -12,20 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/**
- * Adds a random fact to the page.
- */
-function addRandomFact() {
-  const facts = 
+const FACTS = 
       ['👨 I am 19 years old',
       '🍣 My favorite food is sushi',
       '🐶 🐕 I have two dogs, their names are pipo and boogie.',
       '🎸 I play the guitar.',
       '🎱 My favorite number is eight.',
-      '🎀 My favorite color in clothes is pink'];
+      '🎀 My favorite color on clothes is pink'];
 
+/**
+ * Adds a random fact to the page.
+ */
+function addRandomFact() {
   // Pick a random fact.
-  const fact = facts[Math.floor(Math.random() * facts.length)];
+  const fact = FACTS[Math.floor(Math.random() * FACTS.length)];
 
   // Add it to the page.
   const factContainer = document.getElementById('randomFact');
