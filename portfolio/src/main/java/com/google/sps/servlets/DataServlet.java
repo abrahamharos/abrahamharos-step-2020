@@ -30,3 +30,13 @@ public class DataServlet extends HttpServlet {
     response.getWriter().println("<h1>Hello Abraham</h1>");
   }
 }
+
+/**Servlet that return a greeting for web visitors*/
+@WebServlet("/greeting")
+public class DataServlet extends HttpServlet {
+  @Override
+  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    response.setContentType("text/html;");
+    response.getWriter().println("Hi Abraham!");
+  }
+}
