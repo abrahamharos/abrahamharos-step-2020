@@ -31,3 +31,12 @@ function addRandomFact() {
   const factContainer = document.getElementById('randomFact');
   factContainer.innerText = fact;
 }
+
+/**
+ * Adds a greeting when page loads.
+ */
+ function addGreeting(){
+  fetch('greeting').then(response => response.text()).then((greeting) => {
+    document.getElementById('greeting-container').innerText = greeting;
+  })
+ }

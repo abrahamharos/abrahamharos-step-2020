@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="style.css">
     <script src="script.js"></script>
   </head>
-  <body>
+  <body onload="getGreeting()">
     <div id="content">
       <header>
         <h1>Abraham Haros's Portfolio</h1>
@@ -21,6 +21,9 @@
           <li><a href="#randomFacts">Facts</a></li>
         </ul>
       </header>
+      <article id="greetings">
+        <h2 id="greeting-container">Hi!</h2>
+      </article>
       <article id="about">
         <h2>About me.</h2>
         <p>Since childhood I have been passionate about software development, 
