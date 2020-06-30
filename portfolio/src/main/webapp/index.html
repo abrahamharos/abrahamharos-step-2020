@@ -21,8 +21,14 @@
           <li><a href="#randomFacts">Facts</a></li>
         </ul>
       </header>
-      <article id="greetings">
-        <h2 id="greeting-container">Hi!</h2>
+      <article id="comments">
+        <h2>Comments</h2>
+        <form action="/comments">
+          <input type="text" id="firstname" name="firstname" placeholder="Name">
+          <textarea name="message" placeholder="Message"></textarea>
+          <input type="submit" value="Submit">
+        </form>
+        <div onload="getComments()"></div>
       </article>
       <article id="about">
         <h2>About me.</h2>
