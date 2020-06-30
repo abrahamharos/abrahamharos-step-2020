@@ -53,10 +53,9 @@ public class CommentServlet extends HttpServlet {
   /**
    * Converts a Comments instance into a JSON string using the Gson library.
    */
-  private String convertToJson() {
+  private String convertCommentsToJson() {
     Gson gson = new Gson();
-    String json = gson.toJson(comments);
-    return json;
+    return gson.toJson(comments);
   }
 
   /**
@@ -67,11 +66,8 @@ public class CommentServlet extends HttpServlet {
     String commentUser = request.getParameter("username");
     String commentMessage = request.getParameter("message");
     Date time = new Date();
-    //Convert input into a message object
-    Comment newComment = new Comment(time, commentUser, commentMessage);
 
     //Add new comment to the array list
-    comments.add(newComment);
-
+    comments.add(new Comment(time, commentUser, commentMessage));
   }
 }

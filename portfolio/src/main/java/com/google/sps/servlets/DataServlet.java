@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**Servlet that return a greeting for web visitors*/
+/**Servlet that returns a greeting for web visitors*/
 @WebServlet("/greeting")
 public class DataServlet extends HttpServlet {
   @Override
