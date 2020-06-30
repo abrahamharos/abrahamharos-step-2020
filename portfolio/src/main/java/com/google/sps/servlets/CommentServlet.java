@@ -29,31 +29,31 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/comments")
 public class CommentServlet extends HttpServlet {
 
-  List<Comment> comments = new ArrayList<>();
+  private List<Comment> comments = new ArrayList<>();
+
+  @Override
+  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    //Convert the array of comments to JSON
+    String json = convertToJson();
+
+    // Send the JSON as the response
+    response.setContentType("application/json;");
+    response.getWriter().println(json);
+  }
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     //Insert new comment into the array list
     addNewComment(request);
-
+    
     // Redirect back to the HTML page.
     response.sendRedirect("/index.html");
-  }
-
-  @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    //Convert the array of comments to JSON
-    String json = convertToJson(comments);
-
-    //Send the JSON as response
-    response.setContentType("application/json;");
-    response.getWriter().println(json);
   }
 
   /**
    * Converts a Comments instance into a JSON string using the Gson library.
    */
-  private String convertToJson(List<Comment> comments) {
+  private String convertToJson() {
     Gson gson = new Gson();
     String json = gson.toJson(comments);
     return json;
@@ -66,7 +66,6 @@ public class CommentServlet extends HttpServlet {
     //Get input values from the form.
     String commentUser = request.getParameter("username");
     String commentMessage = request.getParameter("message");
-
     Date time = new Date();
     //Convert input into a message object
     Comment newComment = new Comment(time, commentUser, commentMessage);

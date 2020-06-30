@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="style.css">
     <script src="script.js"></script>
   </head>
-  <body onload="getGreeting()">
+  <body onload="getComments()">
     <div id="content">
       <header>
         <h1>Abraham Haros's Portfolio</h1>
@@ -23,12 +23,12 @@
       </header>
       <article id="comments">
         <h2>Comments</h2>
-        <form action="/comments">
-          <input type="text" id="firstname" name="firstname" placeholder="Name">
+        <form action="/comments" method="POST">
+          <input type="text" id="username" name="username" placeholder="Name">
           <textarea name="message" placeholder="Message"></textarea>
           <input type="submit" value="Submit">
         </form>
-        <div onload="getComments()"></div>
+        <div id="comments-container"></div>
       </article>
       <article id="about">
         <h2>About me.</h2>
