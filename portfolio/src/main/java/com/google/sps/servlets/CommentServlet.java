@@ -19,6 +19,7 @@ import com.google.gson.Gson;
 import java.io.IOException;
 import java.util.Date;
 import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -26,18 +27,18 @@ import javax.servlet.http.HttpServletResponse;
 
 /**Servlet that returns an array of comments in JSON format*/
 @WebServlet("/comments")
-public class DataServlet extends HttpServlet {
+public class CommentServlet extends HttpServlet {
 
-  ArrayList<Comment> comments = new ArrayList<Comment>();
+  List<Comment> comments = new ArrayList<>();
   Date time = new Date();
-  //Creates a hardcode list of comments
-  for(int iterator = 0; i < 5; i++){
-      Comment comment = new Comment(time, 'user'+i, '#'+i);
-      comments.add(comment);
-  }
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    //Creates a hardcoded list of comments
+    for(int commentIterator = 0; commentIterator < 5; commentIterator++){
+        Comment comment = new Comment(time, "user"+commentIterator, "#"+commentIterator);
+        comments.add(comment);
+    }
     //Convert the array of comments to JSON
     String json = convertToJson(comments);
 
@@ -49,7 +50,7 @@ public class DataServlet extends HttpServlet {
   /**
    * Converts a Comments instance into a JSON string using the Gson library.
    */
-  private String convertToJsonUsingGson(Comments comments) {
+  private String convertToJson(List<Comment> comments) {
     Gson gson = new Gson();
     String json = gson.toJson(comments);
     return json;
