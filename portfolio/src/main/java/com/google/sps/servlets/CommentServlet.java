@@ -30,15 +30,18 @@ import javax.servlet.http.HttpServletResponse;
 public class CommentServlet extends HttpServlet {
 
   List<Comment> comments = new ArrayList<>();
-  Date time = new Date();
+
+  @Override
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    //Insert new comment into the array list
+    addNewComment(request);
+
+    // Redirect back to the HTML page.
+    response.sendRedirect("/index.html");
+  }
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    //Creates a hardcoded list of comments
-    for(int commentIterator = 0; commentIterator < 5; commentIterator++){
-        Comment comment = new Comment(time, "user"+commentIterator, "#"+commentIterator);
-        comments.add(comment);
-    }
     //Convert the array of comments to JSON
     String json = convertToJson(comments);
 
@@ -54,5 +57,22 @@ public class CommentServlet extends HttpServlet {
     Gson gson = new Gson();
     String json = gson.toJson(comments);
     return json;
+  }
+
+  /**
+   * Retrieve data from the webpage's form
+   */
+  private void addNewComment(HttpServletRequest request) {
+    //Get input values from the form.
+    String commentUser = request.getParameter("username");
+    String commentMessage = request.getParameter("message");
+
+    Date time = new Date();
+    //Convert input into a message object
+    Comment newComment = new Comment(time, commentUser, commentMessage);
+
+    //Add new comment to the array list
+    comments.add(newComment);
+
   }
 }
