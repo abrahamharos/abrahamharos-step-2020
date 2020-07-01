@@ -60,6 +60,9 @@ public class ListCommentsServlet extends HttpServlet {
    * Retrieve comments from datastore
    */
   private void retrieveComments() {
+    //Clean comments array
+    comments.clear();
+
     //Prepares query that will retrieve comments
     Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
 
