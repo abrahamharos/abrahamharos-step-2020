@@ -21,8 +21,8 @@ const FACTS =
       '🎀 My favorite color on clothes is pink'];
 
 /**
- * Adds a random fact to the page.
- */
+* Adds a random fact to the page.
+*/
 function addRandomFact() {
   // Pick a random fact.
   const fact = FACTS[Math.floor(Math.random() * FACTS.length)];
@@ -31,3 +31,62 @@ function addRandomFact() {
   const factContainer = document.getElementById('randomFact');
   factContainer.innerText = fact;
 }
+
+/**
+* Retrieves comments when page loads.
+*/
+const getComments = () => {
+  fetch('/comments').then(response => response.json()).then((comments) => {
+    const commentContainerElement = document.getElementById('comment-container');
+    const titleElement = document.createElement("h2");
+
+    // Clean element
+    commentContainerElement.innerHTML = '';
+
+    // If no comments, display an alert, else append comments to the container element.
+    if (comments.length === 0) {
+      titleElement.innerHTML = "There are no comments 😕, be the first!";
+      commentContainerElement.appendChild(titleElement);
+    }
+    else {
+      titleElement.innerHTML = "Last comments";
+      commentContainerElement.appendChild(titleElement);
+      appendComments(comments, commentContainerElement);
+    }
+  });
+};
+
+/**
+* Creates HTML elements for each comment
+* And appends them into the father element
+* @param {Array<Object>} comments - Array of comments retrieved from servlet
+* @param {Element} commentContainerElement - the target HTML element that will contain the comments.
+*/
+const appendComments = (comments, commentContainerElement) => {    
+  Object.keys(comments).forEach(commentId => {
+    // Create each element with its properties
+    const userElement = document.createElement("h3");
+    userElement.innerHTML = comments[commentId].user;
+
+    const messageElement = document.createElement("p");
+    messageElement.innerHTML = comments[commentId].message;
+
+    const datePostedElement = document.createElement("div");
+    datePostedElement.innerHTML = comments[commentId].datePosted;
+    datePostedElement.classList.add("date");
+
+    const commentElement =  document.createElement("div");
+    commentElement.classList.add("comment");
+
+    // append each element to the father element
+    commentElement.appendChild(userElement);
+    commentElement.appendChild(messageElement);
+    commentElement.appendChild(datePostedElement);
+
+    // Make a final append to the comment container element
+    commentContainerElement.appendChild(commentElement);
+  });
+};
+
+// Retrieve comments when page is loaded
+window.onload = getComments;

@@ -110,7 +110,7 @@ article h3{
   width: 50ex;
 }
 
-#btn-fact {
+.btn {
   background-color: #303f9f;
   border-radius: 5%;
   color: white;
@@ -118,7 +118,55 @@ article h3{
   padding: 10px;
 }
 
-#btn-fact:hover {
+.btn:hover {
   background-color: #c5cae9;
   color: black;
+}
+
+/* Comments section */
+#comments .text{
+  border: 1px solid #bdbdbd;
+  border-radius: 4px;
+  display: block;
+  margin-bottom: 10px;
+  padding: 16px 20px;
+  width: 80%;
+}
+
+#comment-container {
+  max-height: 500px;
+  overflow-y: scroll;
+  
+}
+
+#comment-container h2 {
+  display: block;
+}
+
+.comment {
+  width: 25%;
+  height: 200px;
+  border: 1px solid #bdbdbd;
+  border-radius: 10px;
+  display: inline-block;
+  margin-right: 10px;
+  margin-top: 10px;
+  padding: 10px;
+}
+
+.comment p {
+  max-height: 80px;
+  min-height: 80px;
+  
+  overflow-y: scroll;
+}
+
+.comment .date {
+  background-color: #3f51b5;
+  border-radius: 10px;
+  color: white;
+  display: inline;
+  font-size: small;
+  font-weight: 700;
+  padding: 5px;
 }

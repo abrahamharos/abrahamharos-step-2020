@@ -21,6 +21,16 @@
           <li><a href="#randomFacts">Facts</a></li>
         </ul>
       </header>
+      <article id="comments">
+        <h2>Comment section</h2>
+        <h3>Feel free to leave a comment!</h3>
+        <form action="/comments" method="POST">
+          <input class="text" type="text" id="username" name="username" placeholder="Name">
+          <textarea class="text" name="message" placeholder="Message"></textarea>
+          <input type="submit" value="Submit" class="btn">
+        </form>
+        <div id="comment-container"></div>
+      </article>
       <article id="about">
         <h2>About me.</h2>
         <p>Since childhood I have been passionate about software development, 
@@ -195,7 +205,7 @@
         <h2>Fun facts</h2>
         <button id="btn-fact" type="button" onClick="addRandomFact()">Click here to get a random fact about me!</button>
         <p id="randomFact"></p>
-    </article>
+      </article>
     </div>
   </body>
 </html>
