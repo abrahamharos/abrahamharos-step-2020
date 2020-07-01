@@ -34,7 +34,7 @@ public class CommentServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     //Convert the array of comments to JSON
-    String json = convertToJson();
+    String json = convertCommentsToJson();
 
     // Send the JSON as the response
     response.setContentType("application/json;");
