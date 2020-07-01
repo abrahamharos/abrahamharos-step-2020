@@ -33,10 +33,55 @@ function addRandomFact() {
 }
 
 /**
- * Adds a greeting when page loads.
+ * Retrieves comments when page loads.
  */
- function addGreeting(){
-  fetch('greeting').then(response => response.text()).then((greeting) => {
-    document.getElementById('greeting-container').innerText = greeting;
-  })
- }
+const getComments = () => {
+  fetch('/comments').then(response => response.json()).then((comments) => {
+    const commentContainerElement = document.getElementById('comment-container');
+    const titleElement = document.createElement("h2");
+
+    //Clean element
+    commentContainerElement.innerHTML = '';
+
+    if(comments.length === 0) {
+        titleElement.innerHTML = "There are no comments 😕, be the first!";
+        commentContainerElement.appendChild(titleElement);
+    }
+    else {
+        titleElement.innerHTML = "Last comments";
+        commentContainerElement.appendChild(titleElement);
+        appendComments(comments, commentContainerElement);
+    }
+  });
+};
+
+/**
+* Creates HTML elements for each comment
+* And appends them into the father element
+*/
+const appendComments = (comments, commentContainerElement) => {    
+  Object.keys(comments).forEach(commentId => {
+    console.log(comments[commentId]);
+    //Create each element with its properties
+    const userElement = document.createElement("h3");
+    userElement.innerHTML = comments[commentId].user;
+
+    const messageElement = document.createElement("p");
+    messageElement.innerHTML = comments[commentId].message;
+
+    const datePostedElement = document.createElement("div");
+    datePostedElement.innerHTML = comments[commentId].datePosted;
+    datePostedElement.classList.add("date");
+
+    const commentElement =  document.createElement("div");
+    commentElement.classList.add("comment");
+
+    //append each element to the father element
+    commentElement.appendChild(userElement);
+    commentElement.appendChild(messageElement);
+    commentElement.appendChild(datePostedElement);
+
+    //Make a final append to the comment container element
+    commentContainerElement.appendChild(commentElement);
+  });
+};
