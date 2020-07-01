@@ -19,6 +19,9 @@ import com.google.gson.Gson;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.SortDirection;
 import java.io.IOException;
 import java.util.Date;
 import java.util.ArrayList;
@@ -37,7 +40,7 @@ public class ListCommentsServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     //Convert the array of comments retrieved to JSON
-    String json = retrieveComments();
+    String json = convertCommentsToJson();
 
     // Send the JSON as the response
     response.setContentType("application/json;");
@@ -67,7 +70,7 @@ public class ListCommentsServlet extends HttpServlet {
       //Reads data from an entity
       long commentId = entity.getKey().getId();
       String commentUsername = (String) entity.getProperty("username");
-      String commentTimestamp = (String) entity.getProperty("timestamp");
+      Date commentTimestamp = (Date) entity.getProperty("timestamp");
       String commentMessage = (String) entity.getProperty("message");
 
       //Add new comment to the array list

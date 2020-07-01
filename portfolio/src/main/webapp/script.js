@@ -36,7 +36,7 @@ function addRandomFact() {
 * Retrieves comments when page loads.
 */
 const getComments = () => {
-  fetch('/comments').then(response => response.json()).then((comments) => {
+  fetch('/list-comments').then(response => response.json()).then((comments) => {
     const commentContainerElement = document.getElementById('comment-container');
     const titleElement = document.createElement("h2");
 
