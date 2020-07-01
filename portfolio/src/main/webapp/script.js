@@ -40,11 +40,11 @@ const getComments = () => {
     const commentContainerElement = document.getElementById('comment-container');
     const titleElement = document.createElement("h2");
 
-    //Clean element
+    // Clean element
     commentContainerElement.innerHTML = '';
 
-    //If no comments, display an alert, else append comments to the container element.
-    if(comments.length === 0) {
+    // If no comments, display an alert, else append comments to the container element.
+    if (comments.length === 0) {
       titleElement.innerHTML = "There are no comments 😕, be the first!";
       commentContainerElement.appendChild(titleElement);
     }
@@ -59,10 +59,12 @@ const getComments = () => {
 /**
 * Creates HTML elements for each comment
 * And appends them into the father element
+* @param {Array<Object>} comments - Array of comments retrieved from servlet
+* @param {Element} commentContainerElement - the target HTML element that will contain the comments.
 */
 const appendComments = (comments, commentContainerElement) => {    
   Object.keys(comments).forEach(commentId => {
-    //Create each element with its properties
+    // Create each element with its properties
     const userElement = document.createElement("h3");
     userElement.innerHTML = comments[commentId].user;
 
@@ -76,12 +78,15 @@ const appendComments = (comments, commentContainerElement) => {
     const commentElement =  document.createElement("div");
     commentElement.classList.add("comment");
 
-    //append each element to the father element
+    // append each element to the father element
     commentElement.appendChild(userElement);
     commentElement.appendChild(messageElement);
     commentElement.appendChild(datePostedElement);
 
-    //Make a final append to the comment container element
+    // Make a final append to the comment container element
     commentContainerElement.appendChild(commentElement);
   });
 };
+
+// Retrieve comments when page is loaded
+window.onload = getComments;
