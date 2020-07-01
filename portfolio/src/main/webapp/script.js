@@ -21,8 +21,8 @@ const FACTS =
       '🎀 My favorite color on clothes is pink'];
 
 /**
- * Adds a random fact to the page.
- */
+* Adds a random fact to the page.
+*/
 function addRandomFact() {
   // Pick a random fact.
   const fact = FACTS[Math.floor(Math.random() * FACTS.length)];
@@ -33,8 +33,8 @@ function addRandomFact() {
 }
 
 /**
- * Retrieves comments when page loads.
- */
+* Retrieves comments when page loads.
+*/
 const getComments = () => {
   fetch('/comments').then(response => response.json()).then((comments) => {
     const commentContainerElement = document.getElementById('comment-container');
@@ -43,14 +43,15 @@ const getComments = () => {
     //Clean element
     commentContainerElement.innerHTML = '';
 
+    //If no comments, display an alert, else append comments to the container element.
     if(comments.length === 0) {
-        titleElement.innerHTML = "There are no comments 😕, be the first!";
-        commentContainerElement.appendChild(titleElement);
+      titleElement.innerHTML = "There are no comments 😕, be the first!";
+      commentContainerElement.appendChild(titleElement);
     }
     else {
-        titleElement.innerHTML = "Last comments";
-        commentContainerElement.appendChild(titleElement);
-        appendComments(comments, commentContainerElement);
+      titleElement.innerHTML = "Last comments";
+      commentContainerElement.appendChild(titleElement);
+      appendComments(comments, commentContainerElement);
     }
   });
 };
@@ -61,7 +62,6 @@ const getComments = () => {
 */
 const appendComments = (comments, commentContainerElement) => {    
   Object.keys(comments).forEach(commentId => {
-    console.log(comments[commentId]);
     //Create each element with its properties
     const userElement = document.createElement("h3");
     userElement.innerHTML = comments[commentId].user;
