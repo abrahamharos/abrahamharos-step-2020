@@ -133,28 +133,31 @@ article h3{
   width: 80%;
 }
 
-.comment-container {
+#comment-container {
   max-height: 500px;
   overflow-y: scroll;
   
 }
 
-.comment-container h2 {
+#comment-container h2 {
   display: block;
 }
 
 .comment {
-  width: 30%;
+  width: 25%;
   height: 200px;
   border: 1px solid #bdbdbd;
   border-radius: 10px;
   display: inline-block;
+  margin-right: 10px;
   margin-top: 10px;
   padding: 10px;
 }
 
 .comment p {
-  height: 80px;
+  max-height: 80px;
+  min-height: 80px;
+  
   overflow-y: scroll;
 }
 
