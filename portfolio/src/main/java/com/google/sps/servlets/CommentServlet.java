@@ -16,6 +16,9 @@ package com.google.sps.servlets;
 
 import com.google.sps.comments.Comment;
 import com.google.gson.Gson;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
 import java.io.IOException;
 import java.util.Date;
 import java.util.ArrayList;
@@ -66,6 +69,16 @@ public class CommentServlet extends HttpServlet {
     String commentUser = request.getParameter("username");
     String commentMessage = request.getParameter("message");
     Date time = new Date();
+
+    //Create and prepare entity for datastore
+    Entity commentEntity = new Entity("Comment");
+    commentEntity.setProperty("username", commentUser);
+    commentEntity.setProperty("timestamp", time);
+    commentEntity.setProperty("message", commentMessage);
+
+    //Put entity into datastore
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    datastore.put(commentEntity);
 
     //Add new comment to the array list
     comments.add(new Comment(time, commentUser, commentMessage));
