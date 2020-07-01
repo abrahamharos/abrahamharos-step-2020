@@ -39,6 +39,7 @@ public class ListCommentsServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    retrieveComments();
     //Convert the array of comments retrieved to JSON
     String json = convertCommentsToJson();
 
