@@ -64,7 +64,6 @@ const getComments = () => {
 */
 const appendComments = (comments, commentContainerElement) => {    
   Object.keys(comments).forEach(commentId => {
-    console.log(comments[commentId]);
     // Create each element with its properties
     const userElement = document.createElement("h3");
     userElement.innerHTML = comments[commentId].user;
@@ -100,6 +99,16 @@ const appendComments = (comments, commentContainerElement) => {
     // Make a final append to the comment container element
     commentContainerElement.appendChild(commentElement);
   });
+};
+
+/**
+* Deletes a comment given the id of the comment
+* @param {long} commentId - the id of the comment that will be deleted.
+*/
+const deleteComment = (commentId) => {
+    fetch(`/delete-comment?commentId=${commentId}`).then(() => {
+        getComments();
+    });
 };
 
 // Retrieve comments when page is loaded

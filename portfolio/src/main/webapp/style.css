@@ -179,7 +179,8 @@ article h3{
 }
 
 .comment .trash-icon:hover {
-  color: #ff5252;
+  color: black;
+  cursor: pointer;
 }
 
 /* Form for retrieve selected number of comments*/
