@@ -20,6 +20,7 @@ import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import java.io.IOException;
@@ -35,17 +36,28 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/list-comments")
 public class ListCommentsServlet extends HttpServlet {
 
+  public static final int DEFAULT_COMMENTS = 5;
   private List<Comment> comments = new ArrayList<>();
+  private int numberOfComments = DEFAULT_COMMENTS;
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    retrieveComments();
+    retrieveComments(numberOfComments);
     //Convert the array of comments retrieved to JSON
     String json = convertCommentsToJson();
 
     // Send the JSON as the response
     response.setContentType("application/json;");
     response.getWriter().println(json);
+  }
+
+  @Override
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    // Globally updates number of comments to retrive
+    numberOfComments =  Integer.parseInt(request.getParameter("numberOfComments"));
+
+    // Redirect back to the HTML page.
+    response.sendRedirect("/index.html");
   }
 
   /**
@@ -59,7 +71,7 @@ public class ListCommentsServlet extends HttpServlet {
   /**
    * Retrieve comments from datastore
    */
-  private void retrieveComments() {
+  private void retrieveComments(int numberOfComments) {
     //Clean comments array
     comments.clear();
 
@@ -69,8 +81,10 @@ public class ListCommentsServlet extends HttpServlet {
     //Execute query
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
+    //Applies limit in the number of comments
+    List<Entity> resultsLimited = results.asList(FetchOptions.Builder.withLimit(numberOfComments));
 
-    for (Entity entity : results.asIterable()) {
+    for (Entity entity : resultsLimited) {
       //Reads data from an entity
       long commentId = entity.getKey().getId();
       String commentUsername = (String) entity.getProperty("username");
