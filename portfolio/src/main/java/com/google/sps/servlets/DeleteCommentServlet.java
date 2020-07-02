@@ -24,15 +24,17 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**Servlet that returns an array of comments in JSON format*/
+/**Servlet that deletes a comment*/
 @WebServlet("/delete-comment")
-public class DeleteCommentsServlet extends HttpServlet {
+public class DeleteCommentServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    long id = Long.parseLong(request.getParameter("id"));
+    // Retrieve commentId from the request
+    long commentId = Long.parseLong(request.getParameter("commentId"));
 
-    Key commentEntityKey = KeyFactory.createKey("Comment", id);
+    //Make key for deleting the comment on datastore
+    Key commentEntityKey = KeyFactory.createKey("Comment", commentId);
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.delete(commentEntityKey);
   }
