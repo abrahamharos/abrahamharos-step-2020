@@ -64,6 +64,7 @@ const getComments = () => {
 */
 const appendComments = (comments, commentContainerElement) => {    
   Object.keys(comments).forEach(commentId => {
+    console.log(comments[commentId]);
     // Create each element with its properties
     const userElement = document.createElement("h3");
     userElement.innerHTML = comments[commentId].user;
@@ -78,10 +79,23 @@ const appendComments = (comments, commentContainerElement) => {
     const commentElement =  document.createElement("div");
     commentElement.classList.add("comment");
 
+    const trashIconElement = document.createElement("i");
+    trashIconElement.classList.add("fa");
+    trashIconElement.classList.add("fa-trash");
+    trashIconElement.setAttribute("area-hidden", "true");
+
+    const trashElement = document.createElement("a");
+    trashElement.classList.add("trash-icon");
+    const deleteFunctionParameter = "deleteComment(" + comments[commentId].id + ")";
+    trashElement.setAttribute("onClick", deleteFunctionParameter);
+    trashElement.setAttribute("alt", "Delete comments");
+    trashElement.appendChild(trashIconElement);
+
     // append each element to the father element
     commentElement.appendChild(userElement);
     commentElement.appendChild(messageElement);
     commentElement.appendChild(datePostedElement);
+    commentElement.appendChild(trashElement);
 
     // Make a final append to the comment container element
     commentContainerElement.appendChild(commentElement);
