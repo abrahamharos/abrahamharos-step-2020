@@ -69,7 +69,44 @@ const appendComments = (comments, commentContainerElement) => {
     const userElement = document.createElement("h3");
     userElement.innerHTML = comments[commentId].user;
 
+    const votesContainerElement = document.createElement("div");
+    votesContainerElement.classList.add("votes");
+    const numberOfVotes = document.createElement("p");
+    numberOfVotes.innerHTML = comments[commentId].votes;
+    
+    const upVoteIcon = document.createElement("i");
+    upVoteIcon.classList.add("fa");
+    upVoteIcon.classList.add("fa-thumbs-up");
+    upVoteIcon.setAttribute("area-hidden", "true");
+
+    const upVoteElement = document.createElement("a");
+    upVoteElement.classList.add("icon");
+    upVoteElement.classList.add("up");
+    const voteUpFunctionParameter = "voteComment(" + comments[commentId].id + ",true)";
+    upVoteElement.setAttribute("onClick", voteUpFunctionParameter);
+    upVoteElement.setAttribute("alt", "Thumbs up comment");
+    upVoteElement.appendChild(upVoteIcon);
+
+    const downVoteIcon = document.createElement("i");
+    downVoteIcon.classList.add("fa");
+    downVoteIcon.classList.add("fa-thumbs-down");
+    downVoteIcon.setAttribute("area-hidden", "true");
+
+    const downVoteElement = document.createElement("a");
+    downVoteElement.classList.add("icon");
+    downVoteElement.classList.add("down");
+    const voteDownFunctionParameter = "voteComment(" + comments[commentId].id + ",false)";
+    downVoteElement.setAttribute("onClick", voteDownFunctionParameter);
+    downVoteElement.setAttribute("alt", "Thumbs down comment");
+    downVoteElement.appendChild(downVoteIcon);
+
+    votesContainerElement.appendChild(numberOfVotes);
+    votesContainerElement.appendChild(upVoteElement);
+    votesContainerElement.appendChild(downVoteElement);
+
+
     const messageElement = document.createElement("p");
+    messageElement.classList.add("message");
     messageElement.innerHTML = comments[commentId].message;
 
     const datePostedElement = document.createElement("div");
@@ -93,6 +130,7 @@ const appendComments = (comments, commentContainerElement) => {
 
     // append each element to the father element
     commentElement.appendChild(userElement);
+    commentElement.appendChild(votesContainerElement);
     commentElement.appendChild(messageElement);
     commentElement.appendChild(datePostedElement);
     commentElement.appendChild(trashElement);
@@ -108,6 +146,18 @@ const appendComments = (comments, commentContainerElement) => {
 */
 const deleteComment = (commentId) => {
     fetch(`/delete-comment?commentId=${commentId}`).then(() => {
+        getComments();
+    });
+};
+
+/**
+* votes a comment given the id of the comment and
+* type of vote, true = +1 , false = -1
+* @param {long} commentId - the id of the comment that will be voted.
+* @param {boolean} typeOfVote - the type of vote of the comment that will be voted.
+*/
+const voteComment = (commentId, typeOfVote) => {
+    fetch(`/vote-comment?commentId=${commentId}&vote=${typeOfVote}`).then(() => {
         getComments();
     });
 };

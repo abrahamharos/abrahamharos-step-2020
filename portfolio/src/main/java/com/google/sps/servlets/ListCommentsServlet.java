@@ -68,7 +68,7 @@ public class ListCommentsServlet extends HttpServlet {
     comments.clear();
 
     //Prepares query that will retrieve comments
-    Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
+    Query query = new Query("Comment").addSort("votes", SortDirection.DESCENDING);
 
     //Execute query
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -82,9 +82,10 @@ public class ListCommentsServlet extends HttpServlet {
       String commentUsername = (String) entity.getProperty("username");
       Date commentTimestamp = (Date) entity.getProperty("timestamp");
       String commentMessage = (String) entity.getProperty("message");
+      long votes = (long) entity.getProperty("votes");
 
       //Add new comment to the array list
-      comments.add(new Comment(commentId, commentTimestamp, commentUsername, commentMessage)); 
+      comments.add(new Comment(commentId, commentTimestamp, commentUsername, commentMessage, votes)); 
     }
   }
 }
