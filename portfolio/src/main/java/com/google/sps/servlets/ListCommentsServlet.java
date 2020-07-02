@@ -37,12 +37,12 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/list-comments")
 public class ListCommentsServlet extends HttpServlet {
 
-  public static final int DEFAULT_COMMENTS = 5;
   private List<Comment> comments = new ArrayList<>();
-  private int numberOfComments = DEFAULT_COMMENTS;
+  private int numberOfComments;
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    numberOfComments =  Integer.parseInt(request.getParameter("numberOfComments"));
     retrieveComments(numberOfComments);
     //Convert the array of comments retrieved to JSON
     String json = convertCommentsToJson();
@@ -50,15 +50,6 @@ public class ListCommentsServlet extends HttpServlet {
     // Send the JSON as the response
     response.setContentType("application/json;");
     response.getWriter().println(json);
-  }
-
-  @Override
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    // Globally updates number of comments to retrive
-    numberOfComments =  Integer.parseInt(request.getParameter("numberOfComments"));
-
-    // Redirect back to the HTML page.
-    response.sendRedirect("/index.html");
   }
 
   /**
