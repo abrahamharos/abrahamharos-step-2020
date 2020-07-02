@@ -146,7 +146,7 @@ article h3{
 
 .comment {
   width: 25%;
-  height: 200px;
+  max-height: 200px;
   border: 1px solid #bdbdbd;
   border-radius: 10px;
   display: inline-block;
@@ -209,13 +209,13 @@ article h3{
   color: #e64a19;
 }
 
-.icon {
-  margin: 0px 3px 0px 3px;
+.icon:hover {
+  color: #3F51B5;
+  cursor: pointer;
 }
 
-.icon:hover {
-  color: black;
-  cursor: pointer;
+.icon {
+  margin: 0px 3px 0px 3px;
 }
 
 /* Form for retrieve selected number of comments*/
