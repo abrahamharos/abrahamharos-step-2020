@@ -172,6 +172,16 @@ article h3{
   padding: 5px;
 }
 
+.comment .trash-icon {
+  float: right;
+  margin-right: 5%;
+  color: #e64a19;
+}
+
+.comment .trash-icon:hover {
+  color: #ff5252;
+}
+
 /* Form for retrieve selected number of comments*/
 .number-comments {
   margin-bottom: 30px;
