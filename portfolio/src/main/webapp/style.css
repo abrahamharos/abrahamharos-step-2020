@@ -155,7 +155,12 @@ article h3{
   padding: 10px;
 }
 
-.comment p {
+.comment h3 {
+  display: inline-block;
+  margin: 0;
+}
+
+.comment .message {
   max-height: 80px;
   min-height: 80px;
   
@@ -179,6 +184,36 @@ article h3{
 }
 
 .comment .trash-icon:hover {
+  color: black;
+  cursor: pointer;
+}
+
+.comment .votes {
+  float: right;
+  background-color: #3e464c;
+  border-radius: 10px;
+  padding: 3px;
+}
+
+.comment .votes p{
+  color: white;
+  display: inline-block;
+  margin: 0px 5px 0px 5px;
+}
+
+.up {
+  color: #689f38;
+}
+
+.down {
+  color: #e64a19;
+}
+
+.icon {
+  margin: 0px 3px 0px 3px;
+}
+
+.icon:hover {
   color: black;
   cursor: pointer;
 }
