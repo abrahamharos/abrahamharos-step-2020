@@ -23,6 +23,7 @@ import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.appengine.api.datastore.Key;
 import java.io.IOException;
 import java.util.Date;
 import java.util.ArrayList;
@@ -92,7 +93,7 @@ public class ListCommentsServlet extends HttpServlet {
       String commentMessage = (String) entity.getProperty("message");
 
       //Add new comment to the array list
-      comments.add(new Comment(commentTimestamp, commentUsername, commentMessage)); 
+      comments.add(new Comment(commentId, commentTimestamp, commentUsername, commentMessage)); 
     }
   }
 }
