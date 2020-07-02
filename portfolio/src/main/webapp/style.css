@@ -115,6 +115,7 @@ article h3{
   border-radius: 5%;
   color: white;
   font-weight: 500;
+  height: 40px;
   padding: 10px;
 }
 
@@ -169,4 +170,18 @@ article h3{
   font-size: small;
   font-weight: 700;
   padding: 5px;
+}
+
+/* Form for retrieve selected number of comments*/
+.number-comments {
+  margin-top: 30px;
+}
+
+.number-input{
+  border: 1px solid #bdbdbd;
+  border-radius: 4px;
+  height: 40px;
+  font-weight: 600;
+  padding: 0px 0px 0px 20px;
+  width: 5%;
 }

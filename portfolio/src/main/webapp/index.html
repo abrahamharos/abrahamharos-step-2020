@@ -29,6 +29,11 @@
           <textarea class="text" name="message" placeholder="Message"></textarea>
           <input type="submit" value="Submit" class="btn">
         </form>
+        <form action="/list-comments" method="POST" class="number-comments">
+          <p>Select the number of comments to retrieve:</p>
+          <input class="number-input" type="number" id="numberOfComments" name="numberOfComments" value="5" min="1"></input>
+          <input type="submit" value="Fetch comments" class="btn">
+        </form>
         <div id="comment-container"></div>
       </article>
       <article id="about">
