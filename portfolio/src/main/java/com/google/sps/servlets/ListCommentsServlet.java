@@ -69,13 +69,13 @@ public class ListCommentsServlet extends HttpServlet {
   private void retrieveComments() {
     //Clean comments array
     comments.clear();
-
+    
     //Prepares query that will retrieve comments and sort comment depending on user's preferences
-    Query query;
+    Query query = new Query("Comment");
     if (orderBy.equals("popular")) {
-      query = new Query("Comment").addSort("votes", SortDirection.DESCENDING);
+      query.addSort("votes", SortDirection.DESCENDING);
     } else {
-      query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
+      query.addSort("timestamp", SortDirection.DESCENDING);
     }
 
     //Execute query
