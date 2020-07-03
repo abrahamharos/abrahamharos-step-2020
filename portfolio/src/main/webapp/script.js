@@ -37,7 +37,8 @@ function addRandomFact() {
 */
 const getComments = () => {  
   const numberOfComments = document.getElementById('numberOfComments').value;
-  fetch(`/list-comments?numberOfComments=${numberOfComments}`).then(response => response.json()).then((comments) => {
+  const typeOfComments = document.getElementById('typeOfComments').value;
+  fetch(`/list-comments?numberOfComments=${numberOfComments}&orderBy=${typeOfComments}`).then(response => response.json()).then((comments) => {
     const commentContainerElement = document.getElementById('comment-container');
     const titleElement = document.createElement("h2");
 

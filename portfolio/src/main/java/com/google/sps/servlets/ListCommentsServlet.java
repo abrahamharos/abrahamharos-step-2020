@@ -39,11 +39,14 @@ public class ListCommentsServlet extends HttpServlet {
 
   private List<Comment> comments = new ArrayList<>();
   private int numberOfComments;
+  private String orderBy;
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     numberOfComments =  Integer.parseInt(request.getParameter("numberOfComments"));
-    retrieveComments(numberOfComments);
+    orderBy = (String) request.getParameter("orderBy");
+
+    retrieveComments();
     //Convert the array of comments retrieved to JSON
     String json = convertCommentsToJson();
 
@@ -63,12 +66,17 @@ public class ListCommentsServlet extends HttpServlet {
   /**
    * Retrieve comments from datastore
    */
-  private void retrieveComments(int numberOfComments) {
+  private void retrieveComments() {
     //Clean comments array
     comments.clear();
 
-    //Prepares query that will retrieve comments
-    Query query = new Query("Comment").addSort("votes", SortDirection.DESCENDING);
+    //Prepares query that will retrieve comments and sort comment depending on user's preferences
+    Query query;
+    if (orderBy.equals("popular")) {
+      query = new Query("Comment").addSort("votes", SortDirection.DESCENDING);
+    } else {
+      query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
+    }
 
     //Execute query
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();

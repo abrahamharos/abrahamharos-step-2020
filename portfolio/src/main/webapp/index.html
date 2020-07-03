@@ -11,7 +11,7 @@
   <body>
     <div id="content">
       <header>
-        <h1>Abraham Haros's Portfolio</h1>
+        <h1>Abraham Haros' Portfolio</h1>
         <img src="images/me/profilePicture.jpg" alt="This is a picture of me smiling 
         and wearing a pineapple shirt, I am sitting at the library of my university.">
         <ul id="menu">
@@ -32,7 +32,11 @@
           <input type="submit" value="Submit" class="btn">
         </form>
         <div class="number-comments">
-          <p>Select the maximum number of comments to retrieve:</p>
+          <p>Select the type and the number of comments you want to see:</p>
+          <select class="select-input" name="typeOfComments" id="typeOfComments">
+            <option value="popular">Popular comments</option>
+            <option value="recent">Recent comments</option>
+          </select>
           <input class="number-input" type="number" id="numberOfComments" name="numberOfComments" value="5" min="1"></input>
           <input type="submit" value="Fetch comments" class="btn" onClick="getComments()">
         </div>
@@ -210,7 +214,7 @@
       </article>
       <article id="randomFacts">
         <h2>Fun facts</h2>
-        <button id="btn-fact" type="button" onClick="addRandomFact()">Click here to get a random fact about me!</button>
+        <button id="btn fact" type="button" onClick="addRandomFact()">Click here to get a random fact about me!</button>
         <p id="randomFact"></p>
       </article>
     </div>

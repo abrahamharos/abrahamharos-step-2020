@@ -232,3 +232,12 @@ article h3{
   padding: 0px 0px 0px 20px;
   width: 5%;
 }
+
+.select-input {
+  border: 1px solid #bdbdbd;
+  border-radius: 4px;
+  height: 40px;
+  font-weight: 600;
+  padding: 0px 0px 0px 20px;
+  width: 30%;
+}
