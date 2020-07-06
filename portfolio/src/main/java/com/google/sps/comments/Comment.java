@@ -54,6 +54,6 @@ public final class Comment {
   }
 
   public void setVotes(long vote){
-      votes += vote;
+      votes = vote;
   }
 }

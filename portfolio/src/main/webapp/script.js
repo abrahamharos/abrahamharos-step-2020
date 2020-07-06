@@ -38,9 +38,10 @@ function addRandomFact() {
 const getComments = () => {  
   const numberOfComments = document.getElementById('numberOfComments').value;
   const typeOfComments = document.getElementById('typeOfComments').value;
-  fetch(`/list-comments?numberOfComments=${numberOfComments}&orderBy=${typeOfComments}`).then(response => response.json()).then((comments) => {
+  fetch(`/list-comments?numberOfComments=${numberOfComments}&orderBy=${typeOfComments}`
+    ).then(response => response.json()).then((comments) => {
     const commentContainerElement = document.getElementById('comment-container');
-    const titleElement = document.createElement("h2");
+    const titleElement = document.createElement('h2');
 
     // Clean element
     commentContainerElement.innerHTML = '';
@@ -67,38 +68,38 @@ const getComments = () => {
 const appendComments = (comments, commentContainerElement) => {    
   Object.keys(comments).forEach(commentId => {
     // Create each element with its properties
-    const userElement = document.createElement("h3");
+    const userElement = document.createElement('h3');
     userElement.innerHTML = comments[commentId].user;
 
-    const votesContainerElement = document.createElement("div");
-    votesContainerElement.classList.add("votes");
-    const numberOfVotes = document.createElement("p");
+    const votesContainerElement = document.createElement('div');
+    votesContainerElement.classList.add('votes');
+    const numberOfVotes = document.createElement('p');
     numberOfVotes.innerHTML = comments[commentId].votes;
     
-    const upVoteIcon = document.createElement("i");
-    upVoteIcon.classList.add("fa");
-    upVoteIcon.classList.add("fa-thumbs-up");
-    upVoteIcon.setAttribute("area-hidden", "true");
+    const upVoteIcon = document.createElement('i');
+    upVoteIcon.classList.add('fa');
+    upVoteIcon.classList.add('fa-thumbs-up');
+    upVoteIcon.setAttribute('area-hidden', 'true');
 
-    const upVoteElement = document.createElement("a");
-    upVoteElement.classList.add("icon");
-    upVoteElement.classList.add("up");
+    const upVoteElement = document.createElement('a');
+    upVoteElement.classList.add('icon');
+    upVoteElement.classList.add('up');
     const voteUpFunctionParameter = "voteComment(" + comments[commentId].id + ",true)";
-    upVoteElement.setAttribute("onClick", voteUpFunctionParameter);
-    upVoteElement.setAttribute("alt", "Thumbs up comment");
+    upVoteElement.setAttribute('onClick', voteUpFunctionParameter);
+    upVoteElement.setAttribute('alt', 'Thumbs up comment');
     upVoteElement.appendChild(upVoteIcon);
 
-    const downVoteIcon = document.createElement("i");
-    downVoteIcon.classList.add("fa");
-    downVoteIcon.classList.add("fa-thumbs-down");
-    downVoteIcon.setAttribute("area-hidden", "true");
+    const downVoteIcon = document.createElement('i');
+    downVoteIcon.classList.add('fa');
+    downVoteIcon.classList.add('fa-thumbs-down');
+    downVoteIcon.setAttribute('area-hidden', 'true');
 
-    const downVoteElement = document.createElement("a");
-    downVoteElement.classList.add("icon");
-    downVoteElement.classList.add("down");
+    const downVoteElement = document.createElement('a');
+    downVoteElement.classList.add('icon');
+    downVoteElement.classList.add('down');
     const voteDownFunctionParameter = "voteComment(" + comments[commentId].id + ",false)";
-    downVoteElement.setAttribute("onClick", voteDownFunctionParameter);
-    downVoteElement.setAttribute("alt", "Thumbs down comment");
+    downVoteElement.setAttribute('onClick', voteDownFunctionParameter);
+    downVoteElement.setAttribute('alt', 'Thumbs down comment');
     downVoteElement.appendChild(downVoteIcon);
 
     votesContainerElement.appendChild(numberOfVotes);
@@ -106,27 +107,27 @@ const appendComments = (comments, commentContainerElement) => {
     votesContainerElement.appendChild(downVoteElement);
 
 
-    const messageElement = document.createElement("p");
-    messageElement.classList.add("message");
+    const messageElement = document.createElement('p');
+    messageElement.classList.add('message');
     messageElement.innerHTML = comments[commentId].message;
 
-    const datePostedElement = document.createElement("div");
+    const datePostedElement = document.createElement('div');
     datePostedElement.innerHTML = comments[commentId].datePosted;
-    datePostedElement.classList.add("date");
+    datePostedElement.classList.add('date');
 
-    const commentElement =  document.createElement("div");
-    commentElement.classList.add("comment");
+    const commentElement =  document.createElement('div');
+    commentElement.classList.add('comment');
 
-    const trashIconElement = document.createElement("i");
-    trashIconElement.classList.add("fa");
-    trashIconElement.classList.add("fa-trash");
-    trashIconElement.setAttribute("area-hidden", "true");
+    const trashIconElement = document.createElement('i');
+    trashIconElement.classList.add('fa');
+    trashIconElement.classList.add('fa-trash');
+    trashIconElement.setAttribute('area-hidden', 'true');
 
-    const trashElement = document.createElement("a");
-    trashElement.classList.add("trash-icon");
+    const trashElement = document.createElement('a');
+    trashElement.classList.add('trash-icon');
     const deleteFunctionParameter = "deleteComment(" + comments[commentId].id + ")";
-    trashElement.setAttribute("onClick", deleteFunctionParameter);
-    trashElement.setAttribute("alt", "Delete comments");
+    trashElement.setAttribute('onClick', deleteFunctionParameter);
+    trashElement.setAttribute('alt', 'Delete comments');
     trashElement.appendChild(trashIconElement);
 
     // append each element to the father element
