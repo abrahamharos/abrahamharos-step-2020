@@ -22,11 +22,15 @@ public final class Comment {
   private final Date datePosted;
   private final String user;
   private final String message;
+  private final long id;
+  private long votes;
 
-  public Comment(Date datePosted, String user, String message) {
+  public Comment(long id, Date datePosted, String user, String message, long votes) {
     this.datePosted = datePosted;
     this.user = user;
     this.message = message;
+    this.id = id;
+    this.votes = votes;
   }
 
   public Date getDatePosted() {
@@ -41,4 +45,15 @@ public final class Comment {
     return message;
   }
 
+  public long getId() {
+    return id;
+  }
+
+  public long getVotes(){
+    return votes; 
+  }
+
+  public void setVotes(long vote){
+      votes = vote;
+  }
 }

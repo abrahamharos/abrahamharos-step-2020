@@ -115,6 +115,7 @@ article h3{
   border-radius: 5%;
   color: white;
   font-weight: 500;
+  height: 40px;
   padding: 10px;
 }
 
@@ -145,7 +146,7 @@ article h3{
 
 .comment {
   width: 25%;
-  height: 200px;
+  max-height: 200px;
   border: 1px solid #bdbdbd;
   border-radius: 10px;
   display: inline-block;
@@ -154,7 +155,12 @@ article h3{
   padding: 10px;
 }
 
-.comment p {
+.comment h3 {
+  display: inline-block;
+  margin: 0;
+}
+
+.comment .message {
   max-height: 80px;
   min-height: 80px;
   
@@ -169,4 +175,69 @@ article h3{
   font-size: small;
   font-weight: 700;
   padding: 5px;
+}
+
+.comment .trash-icon {
+  float: right;
+  margin-right: 5%;
+  color: #e64a19;
+}
+
+.comment .trash-icon:hover {
+  color: black;
+  cursor: pointer;
+}
+
+.comment .votes {
+  float: right;
+  background-color: #3e464c;
+  border-radius: 10px;
+  padding: 3px;
+}
+
+.comment .votes p{
+  color: white;
+  display: inline-block;
+  margin: 0px 5px 0px 5px;
+}
+
+.up {
+  color: #689f38;
+}
+
+.down {
+  color: #e64a19;
+}
+
+.icon:hover {
+  color: #3F51B5;
+  cursor: pointer;
+}
+
+.icon {
+  margin: 0px 3px 0px 3px;
+}
+
+/* Form for retrieve selected number of comments*/
+.number-comments {
+  margin-bottom: 30px;
+  margin-top: 30px;
+}
+
+.number-input{
+  border: 1px solid #bdbdbd;
+  border-radius: 4px;
+  height: 40px;
+  font-weight: 600;
+  padding: 0px 0px 0px 20px;
+  width: 5%;
+}
+
+.select-input {
+  border: 1px solid #bdbdbd;
+  border-radius: 4px;
+  height: 40px;
+  font-weight: 600;
+  padding: 0px 0px 0px 20px;
+  width: 30%;
 }

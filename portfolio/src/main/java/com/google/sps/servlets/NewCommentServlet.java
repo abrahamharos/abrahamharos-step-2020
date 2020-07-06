@@ -16,6 +16,9 @@ package com.google.sps.servlets;
 
 import com.google.sps.comments.Comment;
 import com.google.gson.Gson;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
 import java.io.IOException;
 import java.util.Date;
 import java.util.ArrayList;
@@ -25,21 +28,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**Servlet that returns an array of comments in JSON format*/
-@WebServlet("/comments")
-public class CommentServlet extends HttpServlet {
-
-  private List<Comment> comments = new ArrayList<>();
-
-  @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    //Convert the array of comments to JSON
-    String json = convertCommentsToJson();
-
-    // Send the JSON as the response
-    response.setContentType("application/json;");
-    response.getWriter().println(json);
-  }
+/**Servlet that inserts a comment in datastore*/
+@WebServlet("/new-comment")
+public class NewCommentServlet extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -51,14 +42,6 @@ public class CommentServlet extends HttpServlet {
   }
 
   /**
-   * Converts a Comments instance into a JSON string using the Gson library.
-   */
-  private String convertCommentsToJson() {
-    Gson gson = new Gson();
-    return gson.toJson(comments);
-  }
-
-  /**
    * Retrieve data from the webpage's form
    */
   private void addNewComment(HttpServletRequest request) {
@@ -67,7 +50,15 @@ public class CommentServlet extends HttpServlet {
     String commentMessage = request.getParameter("message");
     Date time = new Date();
 
-    //Add new comment to the array list
-    comments.add(new Comment(time, commentUser, commentMessage));
+    //Create and prepare entity for datastore
+    Entity commentEntity = new Entity("Comment");
+    commentEntity.setProperty("username", commentUser);
+    commentEntity.setProperty("timestamp", time);
+    commentEntity.setProperty("message", commentMessage);
+    commentEntity.setProperty("votes", 0);
+
+    //Put entity into datastore
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    datastore.put(commentEntity);
   }
 }
