@@ -39,7 +39,8 @@ public class AuthServlet extends HttpServlet {
     UserService userService = UserServiceFactory.getUserService();
     if (userService.isUserLoggedIn()) {
       String username = getUserName(userService.getCurrentUser().getUserId());
-      printRegistrationPage(out, username);
+      String logoutUrl = userService.createLogoutURL("/auth");
+      printRegistrationPage(out, username, logoutUrl);
     } else {
       String loginUrl = userService.createLoginURL("/auth");
       printLoginPage(out, loginUrl);
@@ -95,7 +96,7 @@ public class AuthServlet extends HttpServlet {
     out.println("</article></div>");
   }
 
-  private void printRegistrationPage(PrintWriter out, String username) {
+  private void printRegistrationPage(PrintWriter out, String username, String logoutUrl) {
     out.println("<link rel=\"stylesheet\" href=\"style.css\">");
     out.println("<div id=\"content\">");
     out.println("<header><h1>Registration page</h1></header>");
@@ -106,6 +107,7 @@ public class AuthServlet extends HttpServlet {
     out.println("<input class=\"text-input\" name=\"username\" value=\"" + username + "\" placeholder=\"Username\" />");
     out.println("<input type=\"submit\" value=\"Submit\" class=\"btn\">");
     out.println("</form>");
+    out.println("<a href=\"" + logoutUrl + "\" class=\"btn\">Click here to log out.</a>");
     out.println("</article></div>");
   }
 }
