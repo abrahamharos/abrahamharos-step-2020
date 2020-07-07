@@ -178,5 +178,36 @@ const voteComment = (commentId, typeOfVote) => {
     });
 };
 
+/**
+ * Retrieves user data when page loads.
+ */
+const getUserData = () => {
+  fetch('/getUser'
+  ).then(response => {
+    if (response.redirected) {
+      window.location.href = response.url;
+    } else {
+      response.json().then((userData) => {
+        const userContainerElement = document.getElementById('user-container');
+        const nameElement = document.createElement('p');
+        const logoutElement = document.createElement('a');
+
+        // Clean element
+        userContainerElement.innerHTML = '';
+
+        //Insert user data into HTML body
+        nameElement.innerHTML = 'Hi ' + userData.name + '!';
+        userContainerElement.appendChild(nameElement);
+        logoutElement.setAttribute('href', userData.logoutUrl);
+        logoutElement.innerHTML = 'Click here to logout!';
+        userContainerElement.appendChild(logoutElement);
+      });
+    }
+  });
+}
+
 // Retrieve comments when page is loaded
-window.onload = getComments;
+window.onload = () => {
+  getUserData();
+  getComments();
+};

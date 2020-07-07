@@ -250,3 +250,14 @@ article h3{
   padding: 16px 20px;
   width: 80%;
 }
+
+#user-container {
+  display: inline;
+  margin-left: 10%;
+  margin-right: 10%;
+}
+
+#user-container p {
+  display: inline-block;
+  margin-right: 100px;
+}
