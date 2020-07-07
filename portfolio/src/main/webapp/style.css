@@ -241,3 +241,12 @@ article h3{
   padding: 0px 0px 0px 20px;
   width: 30%;
 }
+
+.text-input{
+  border: 1px solid #bdbdbd;
+  border-radius: 4px;
+  display: block;
+  margin-bottom: 10px;
+  padding: 16px 20px;
+  width: 80%;
+}
