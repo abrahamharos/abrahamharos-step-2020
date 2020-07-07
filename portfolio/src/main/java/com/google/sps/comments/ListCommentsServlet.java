@@ -14,6 +14,7 @@
 
 package com.google.sps.comments;
 
+import com.google.sps.auth.AuthServlet;
 import com.google.sps.comments.Comment;
 import com.google.gson.Gson;
 import com.google.appengine.api.datastore.DatastoreService;
@@ -43,16 +44,20 @@ public class ListCommentsServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    numberOfComments =  Integer.parseInt(request.getParameter("numberOfComments"));
-    orderBy = (String) request.getParameter("orderBy");
+    if (AuthServlet.isRegistered()) {
+      numberOfComments =  Integer.parseInt(request.getParameter("numberOfComments"));
+      orderBy = (String) request.getParameter("orderBy");
 
-    retrieveComments();
-    //Convert the array of comments retrieved to JSON
-    String json = convertCommentsToJson();
+      retrieveComments();
+      //Convert the array of comments retrieved to JSON
+      String json = convertCommentsToJson();
 
-    // Send the JSON as the response
-    response.setContentType("application/json;");
-    response.getWriter().println(json);
+      // Send the JSON as the response
+      response.setContentType("application/json;");
+      response.getWriter().println(json);
+    } else {
+      response.sendRedirect("/auth");
+    }
   }
 
   /**

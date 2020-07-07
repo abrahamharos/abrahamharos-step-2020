@@ -39,22 +39,28 @@ const getComments = () => {
   const numberOfComments = document.getElementById('numberOfComments').value;
   const typeOfComments = document.getElementById('typeOfComments').value;
   fetch(`/list-comments?numberOfComments=${numberOfComments}&orderBy=${typeOfComments}`
-    ).then(response => response.json()).then((comments) => {
-    const commentContainerElement = document.getElementById('comment-container');
-    const titleElement = document.createElement('h2');
+  ).then(response => {
+    if (response.redirected) {
+      window.location.href = response.url;
+    } else {
+      response.json().then((comments) => {
+        const commentContainerElement = document.getElementById('comment-container');
+        const titleElement = document.createElement('h2');
 
-    // Clean element
-    commentContainerElement.innerHTML = '';
+        // Clean element
+        commentContainerElement.innerHTML = '';
 
-    // If no comments, display an alert, else append comments to the container element.
-    if (comments.length === 0) {
-      titleElement.innerHTML = "There are no comments 😕, be the first!";
-      commentContainerElement.appendChild(titleElement);
-    }
-    else {
-      titleElement.innerHTML = "Last comments";
-      commentContainerElement.appendChild(titleElement);
-      appendComments(comments, commentContainerElement);
+        // If no comments, display an alert, else append comments to the container element.
+        if (comments.length === 0) {
+          titleElement.innerHTML = "There are no comments 😕, be the first!";
+          commentContainerElement.appendChild(titleElement);
+        }
+        else {
+          titleElement.innerHTML = "Last comments";
+          commentContainerElement.appendChild(titleElement);
+          appendComments(comments, commentContainerElement);
+        }
+      });
     }
   });
 };
@@ -147,8 +153,12 @@ const appendComments = (comments, commentContainerElement) => {
 * @param {long} commentId - the id of the comment that will be deleted.
 */
 const deleteComment = (commentId) => {
-    fetch(`/delete-comment?commentId=${commentId}`).then(() => {
+    fetch(`/delete-comment?commentId=${commentId}`).then(response => {
+      if (response.redirected) {
+        window.location.href = response.url;
+      } else {
         getComments();
+      }
     });
 };
 
@@ -159,8 +169,12 @@ const deleteComment = (commentId) => {
 * @param {boolean} typeOfVote - the type of vote of the comment that will be voted.
 */
 const voteComment = (commentId, typeOfVote) => {
-    fetch(`/vote-comment?commentId=${commentId}&vote=${typeOfVote}`).then(() => {
+    fetch(`/vote-comment?commentId=${commentId}&vote=${typeOfVote}`).then(response => {
+      if (response.redirected) {
+        window.location.href = response.url;
+      } else {
         getComments();
+      }
     });
 };
 

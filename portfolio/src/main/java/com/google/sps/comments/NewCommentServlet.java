@@ -14,6 +14,7 @@
 
 package com.google.sps.comments;
 
+import com.google.sps.auth.AuthServlet;
 import com.google.sps.comments.Comment;
 import com.google.gson.Gson;
 import com.google.appengine.api.datastore.DatastoreService;
@@ -34,11 +35,15 @@ public class NewCommentServlet extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    //Insert new comment into the array list
-    addNewComment(request);
-    
-    // Redirect back to the HTML page.
-    response.sendRedirect("/index.html");
+    if (AuthServlet.isRegistered()) {
+      //Insert new comment into the array list
+      addNewComment(request);
+
+      // Redirect back to the HTML page.
+      response.sendRedirect("/index.html");
+    } else {
+      response.sendRedirect("/auth");
+    }
   }
 
   /**

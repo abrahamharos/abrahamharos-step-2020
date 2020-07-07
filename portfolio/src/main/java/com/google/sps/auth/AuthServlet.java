@@ -64,14 +64,13 @@ public class AuthServlet extends HttpServlet {
     entity.setProperty("username", username);
     // The put() function automatically inserts new data or updates existing data based on ID
     datastore.put(entity);
-
     response.sendRedirect("/index.html");
   }
 
   /**
    * Returns the nickname of the user with id, or empty String if the user has not set a nickname.
    */
-  private String getUserName(String id) {
+  public static String getUserName(String id) {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     Query query =
             new Query("UserInfo")
@@ -81,8 +80,7 @@ public class AuthServlet extends HttpServlet {
     if (entity == null) {
       return "";
     }
-    String username = (String) entity.getProperty("username");
-    return username;
+    return (String) entity.getProperty("username");
   }
 
   /* Prints the html body of the login page */
@@ -109,5 +107,17 @@ public class AuthServlet extends HttpServlet {
     out.println("</form>");
     out.println("<a href=\"" + logoutUrl + "\" class=\"btn\">Click here to log out.</a>");
     out.println("</article></div>");
+  }
+
+  /* Function that returns if a user is registered */
+  public static boolean isRegistered() {
+    UserService userService = UserServiceFactory.getUserService();
+
+    if (!userService.isUserLoggedIn()) return false;
+
+    // If user has not set a nickname, return false
+    // User is logged in and has a nickname, so the request can proceed
+    String nickname = getUserName(userService.getCurrentUser().getUserId());
+    return nickname != null;
   }
 }
