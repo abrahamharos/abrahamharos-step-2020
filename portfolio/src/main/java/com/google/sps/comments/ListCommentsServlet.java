@@ -15,6 +15,8 @@
 package com.google.sps.comments;
 
 import com.google.sps.auth.AuthServlet;
+import com.google.sps.auth.GetUserServlet;
+import com.google.sps.auth.User;
 import com.google.sps.comments.Comment;
 import com.google.gson.Gson;
 import com.google.appengine.api.datastore.DatastoreService;
@@ -86,6 +88,7 @@ public class ListCommentsServlet extends HttpServlet {
     //Execute query
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
+    User user = GetUserServlet.getUserData();
     //Applies limit in the number of comments
     List<Entity> resultsLimited = results.asList(FetchOptions.Builder.withLimit(numberOfComments));
 
@@ -93,12 +96,16 @@ public class ListCommentsServlet extends HttpServlet {
       //Reads data from an entity
       long commentId = entity.getKey().getId();
       String commentUsername = (String) entity.getProperty("username");
+      String commentUserId = (String) entity.getProperty("userId");
       Date commentTimestamp = (Date) entity.getProperty("timestamp");
       String commentMessage = (String) entity.getProperty("message");
       long votes = (long) entity.getProperty("votes");
 
+      //check if the comment is posted by the same user logged in
+      boolean postedBySameUser = user.getId().equals(commentUserId) ? true : false;
+
       //Add new comment to the array list
-      comments.add(new Comment(commentId, commentTimestamp, commentUsername, commentMessage, votes)); 
+      comments.add(new Comment(commentId, commentTimestamp, commentUsername, commentUserId, commentMessage, votes, postedBySameUser));
     }
   }
 }

@@ -15,6 +15,8 @@
 package com.google.sps.comments;
 
 import com.google.sps.auth.AuthServlet;
+import com.google.sps.auth.GetUserServlet;
+import com.google.sps.auth.User;
 import com.google.sps.comments.Comment;
 import com.google.gson.Gson;
 import com.google.appengine.api.datastore.DatastoreService;
@@ -51,13 +53,14 @@ public class NewCommentServlet extends HttpServlet {
    */
   private void addNewComment(HttpServletRequest request) {
     //Get input values from the form.
-    String commentUser = request.getParameter("username");
     String commentMessage = request.getParameter("message");
     Date time = new Date();
+    User user = GetUserServlet.getUserData();
 
     //Create and prepare entity for datastore
     Entity commentEntity = new Entity("Comment");
-    commentEntity.setProperty("username", commentUser);
+    commentEntity.setProperty("username", user.getName());
+    commentEntity.setProperty("userId", user.getId());
     commentEntity.setProperty("timestamp", time);
     commentEntity.setProperty("message", commentMessage);
     commentEntity.setProperty("votes", 0);

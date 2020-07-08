@@ -16,9 +16,13 @@ package com.google.sps.comments;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.sps.auth.AuthServlet;
+import com.google.sps.auth.GetUserServlet;
+import com.google.sps.auth.User;
+
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -32,13 +36,25 @@ public class DeleteCommentServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     if (AuthServlet.isRegistered()) {
-      // Retrieve commentId from the request
-      long commentId = Long.parseLong(request.getParameter("commentId"));
+      try{
+        // Retrieve commentId from the request
+        long commentId = Long.parseLong(request.getParameter("commentId"));
 
-      //Make key for deleting the comment on datastore
-      Key commentEntityKey = KeyFactory.createKey("Comment", commentId);
-      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-      datastore.delete(commentEntityKey);
+        //Make key for deleting the comment on datastore
+        Key commentEntityKey = KeyFactory.createKey("Comment", commentId);
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        Entity comment = datastore.get(commentEntityKey);
+
+        User user = GetUserServlet.getUserData();
+
+        //Only delete the comment if you're the owner of the comment
+        if (comment.getProperty("userId").equals(user.getId())) {
+          System.out.println(user.getId());
+          datastore.delete(commentEntityKey);
+        }
+      }catch(com.google.appengine.api.datastore.EntityNotFoundException e){
+        System.out.println(e);
+      }
     } else {
       response.sendRedirect("/auth");
     }

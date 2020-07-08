@@ -35,7 +35,7 @@ function addRandomFact() {
 /**
 * Retrieves comments when page loads.
 */
-const getComments = () => {  
+const getComments = () => {
   const numberOfComments = document.getElementById('numberOfComments').value;
   const typeOfComments = document.getElementById('typeOfComments').value;
   fetch(`/list-comments?numberOfComments=${numberOfComments}&orderBy=${typeOfComments}`
@@ -71,11 +71,11 @@ const getComments = () => {
 * @param {Array<Object>} comments - Array of comments retrieved from servlet
 * @param {Element} commentContainerElement - the target HTML element that will contain the comments.
 */
-const appendComments = (comments, commentContainerElement) => {    
+const appendComments = (comments, commentContainerElement) => {
   Object.keys(comments).forEach(commentId => {
     // Create each element with its properties
     const userElement = document.createElement('h3');
-    userElement.innerHTML = comments[commentId].user;
+    userElement.innerHTML = comments[commentId].username;
 
     const votesContainerElement = document.createElement('div');
     votesContainerElement.classList.add('votes');
@@ -123,26 +123,30 @@ const appendComments = (comments, commentContainerElement) => {
 
     const commentElement =  document.createElement('div');
     commentElement.classList.add('comment');
-
     const trashIconElement = document.createElement('i');
-    trashIconElement.classList.add('fa');
-    trashIconElement.classList.add('fa-trash');
-    trashIconElement.setAttribute('area-hidden', 'true');
-
     const trashElement = document.createElement('a');
-    trashElement.classList.add('trash-icon');
-    const deleteFunctionParameter = "deleteComment(" + comments[commentId].id + ")";
-    trashElement.setAttribute('onClick', deleteFunctionParameter);
-    trashElement.setAttribute('alt', 'Delete comments');
-    trashElement.appendChild(trashIconElement);
+
+    //Only show delete icon if the comment was posted by the same user
+    if (comments[commentId].postedBySameUser) {
+      trashIconElement.classList.add('fa');
+      trashIconElement.classList.add('fa-trash');
+      trashIconElement.setAttribute('area-hidden', 'true');
+
+      trashElement.classList.add('trash-icon');
+      const deleteFunctionParameter = "deleteComment(" + comments[commentId].id + ")";
+      trashElement.setAttribute('onClick', deleteFunctionParameter);
+      trashElement.setAttribute('alt', 'Delete comments');
+      trashElement.appendChild(trashIconElement);
+    }
 
     // append each element to the father element
     commentElement.appendChild(userElement);
     commentElement.appendChild(votesContainerElement);
     commentElement.appendChild(messageElement);
     commentElement.appendChild(datePostedElement);
-    commentElement.appendChild(trashElement);
-
+    if (comments[commentId].postedBySameUser) {
+      commentElement.appendChild(trashElement);
+    }
     // Make a final append to the comment container element
     commentContainerElement.appendChild(commentElement);
   });
@@ -206,7 +210,7 @@ const getUserData = () => {
   });
 }
 
-// Retrieve comments when page is loaded
+// Retrieve comments and user's data when page is loaded
 window.onload = () => {
   getUserData();
   getComments();
