@@ -50,7 +50,8 @@ public class ListCommentsServlet extends HttpServlet {
       String json = convertCommentsToJson(comments);
 
       // Send the JSON as the response.
-      response.setContentType("application/json;");
+      response.setContentType("application/json; charset=UTF-8");
+      response.setCharacterEncoding("UTF-8");
       response.getWriter().println(json);
     } else {
       response.sendRedirect(COMMONS.AUTH_URL);
