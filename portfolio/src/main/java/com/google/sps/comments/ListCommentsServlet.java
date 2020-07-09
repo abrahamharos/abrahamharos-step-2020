@@ -40,16 +40,14 @@ import javax.servlet.http.HttpServletResponse;
 public class ListCommentsServlet extends HttpServlet {
 
   private List<Comment> comments = new ArrayList<>();
-  private int numberOfComments;
-  private String orderBy;
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     if (AuthServlet.hasUserNicknameSet()) {
-      numberOfComments =  Integer.parseInt(request.getParameter("numberOfComments"));
-      orderBy = (String) request.getParameter("orderBy");
+      int numberOfComments =  Integer.parseInt(request.getParameter("numberOfComments"));
+      String orderBy = (String) request.getParameter("orderBy");
 
-      retrieveComments();
+      retrieveComments(numberOfComments, orderBy);
       // Convert the array of comments retrieved to JSON.
       String json = convertCommentsToJson();
 
@@ -72,7 +70,7 @@ public class ListCommentsServlet extends HttpServlet {
   /**
    * Retrieve comments from datastore
    */
-  private void retrieveComments() {
+  private void retrieveComments(int numberOfComments, String orderBy) {
     // Clean comments array.
     comments.clear();
     

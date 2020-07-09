@@ -14,17 +14,19 @@
 
 package com.google.sps.auth;
 
+import com.google.sps.COMMONS;
+
 public final class User {
   private final String id;
   private final String name;
   private String url;
-  private String authStatus;
+  private COMMONS.authStatus userStatus;
 
-  public User(String id, String name, String url, String authStatus) {
+  public User(String id, String name, String url, COMMONS.authStatus userStatus) {
     this.id = id;
     this.name = name;
     this.url = url;
-    this.authStatus = authStatus;
+    this.userStatus = userStatus;
   }
 
   public String getId() {
@@ -35,7 +37,7 @@ public final class User {
     return name;
   }
 
-  public void setAuthStatus(String authStatus) {
-    this.authStatus = authStatus;
+  public void setAuthStatus(COMMONS.authStatus userStatus) {
+    this.userStatus = userStatus;
   }
 }

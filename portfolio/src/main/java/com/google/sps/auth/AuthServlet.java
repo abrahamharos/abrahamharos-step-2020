@@ -34,7 +34,7 @@ public class AuthServlet extends HttpServlet {
 
   /**
    * doGet method returns the user data when user is registered (has a nickname).
-   * if the user does not have a nickname, the servlet return a temporal user
+   * If the user does not have a nickname, the servlet return a temporal user
    * with the login URL and the auth status
    */
   @Override
@@ -46,20 +46,20 @@ public class AuthServlet extends HttpServlet {
       if (hasUserNicknameSet()) {
         // If user is completely registered return user's data.
         User user = getUserData();
-        user.setAuthStatus("hasNickname");
+        user.setAuthStatus(COMMONS.authStatus.HAS_NICKNAME);
         response.getWriter().println(userToJson(user));
       } else {
         // If user is logged in but not registered return auth status.
         String userUrl = userService.createLogoutURL(COMMONS.AUTH_URL);
         String userId = userService.getCurrentUser().getUserId();
 
-        User tempUser = new User(userId, null, userUrl, "loggedIn");
+        User tempUser = new User(userId, null, userUrl, COMMONS.authStatus.LOGGED_IN);
         response.getWriter().println(userToJson(tempUser));
       }
     } else {
       // If user is logged out, return the log in url.
       String userUrl = userService.createLoginURL(COMMONS.AUTH_URL);
-      User tempUser = new User(null, null, userUrl, "loggedOut");
+      User tempUser = new User(null, null, userUrl, COMMONS.authStatus.LOGGED_OUT);
       response.getWriter().println(userToJson(tempUser));
     }
 
@@ -99,7 +99,7 @@ public class AuthServlet extends HttpServlet {
     return (String) entity.getProperty("username");
   }
 
-  // Function that returns if a user is registered.
+  // Function that returns if a user has nickname set.
   public static boolean hasUserNicknameSet() {
     UserService userService = UserServiceFactory.getUserService();
 
@@ -116,8 +116,11 @@ public class AuthServlet extends HttpServlet {
     Gson gson = new Gson();
     return gson.toJson(userData);
   }
-
-  // Function that returns user data in Json format.
+  
+  /**
+   * @return User user Object containing the essential user data for next step.
+   * * The userStatus is set on the next step (Auth Servlet).
+   */
   public static User getUserData() {
     // Initialize userService and Datastore to retrieve user data.
     UserService userService = UserServiceFactory.getUserService();

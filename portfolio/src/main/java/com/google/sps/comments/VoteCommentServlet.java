@@ -39,7 +39,7 @@ public class VoteCommentServlet extends HttpServlet {
       long commentId = Long.parseLong(request.getParameter("commentId"));
       boolean typeOfVote = Boolean.parseBoolean(request.getParameter("vote"));
 
-      // If key dows not exists, catch the error.
+      // If key does not exist, catch the error.
       try {
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         Key commentEntityKey = KeyFactory.createKey("Comment", commentId);
