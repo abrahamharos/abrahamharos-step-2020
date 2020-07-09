@@ -20,25 +20,40 @@ import java.util.Date;
 public final class Comment {
 
   private final Date datePosted;
-  private final String user;
+  private final String username;
+  private final String userId;
   private final String message;
   private final long id;
   private long votes;
+  private final boolean postedBySameUser;
 
-  public Comment(long id, Date datePosted, String user, String message, long votes) {
+/**
+ * Comment constructor
+ * @param id Comment id retrieved from datastore
+ * @param username  name of the user that posted the comment
+ * @param votes number of votes of the comment
+ * @param postedBySameUser determines if the user that is logged in posted this particular comment.
+ * **/
+  public Comment(long id, Date datePosted, String username, String userId, String message, long votes, boolean postedBySameUser) {
     this.datePosted = datePosted;
-    this.user = user;
+    this.username = username;
+    this.userId = userId;
     this.message = message;
     this.id = id;
     this.votes = votes;
+    this.postedBySameUser = postedBySameUser;
   }
 
   public Date getDatePosted() {
     return datePosted;
   }
 
-  public String getUser() {
-    return user;
+  public String getUsername() {
+    return username;
+  }
+
+  public String getUserId() {
+    return userId;
   }
 
   public String getMessage() {
@@ -55,5 +70,9 @@ public final class Comment {
 
   public void setVotes(long vote){
       votes = vote;
+  }
+
+  public boolean isPostedBySameUser() {
+    return postedBySameUser;
   }
 }

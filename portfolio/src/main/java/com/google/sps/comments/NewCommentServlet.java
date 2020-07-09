@@ -12,17 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.google.sps.servlets;
+package com.google.sps.comments;
 
-import com.google.sps.comments.Comment;
-import com.google.gson.Gson;
+import com.google.sps.COMMONS;
+import com.google.sps.auth.AuthServlet;
+import com.google.sps.auth.User;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import java.io.IOException;
 import java.util.Date;
-import java.util.ArrayList;
-import java.util.List;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -34,30 +33,35 @@ public class NewCommentServlet extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    //Insert new comment into the array list
-    addNewComment(request);
-    
-    // Redirect back to the HTML page.
-    response.sendRedirect("/index.html");
+    if (AuthServlet.hasUserNicknameSet()) {
+      // Insert new comment into the array list.
+      addNewComment(request);
+
+      // Redirect back to the HTML page.
+      response.sendRedirect(COMMONS.INDEX_PAGE);
+    } else {
+      response.sendRedirect(COMMONS.AUTH_URL);
+    }
   }
 
   /**
    * Retrieve data from the webpage's form
    */
   private void addNewComment(HttpServletRequest request) {
-    //Get input values from the form.
-    String commentUser = request.getParameter("username");
+    // Get input values from the form.
     String commentMessage = request.getParameter("message");
     Date time = new Date();
+    User user = AuthServlet.getUserData();
 
-    //Create and prepare entity for datastore
+    // Create and prepare entity for datastore.
     Entity commentEntity = new Entity("Comment");
-    commentEntity.setProperty("username", commentUser);
+    commentEntity.setProperty("username", user.getName());
+    commentEntity.setProperty("userId", user.getId());
     commentEntity.setProperty("timestamp", time);
     commentEntity.setProperty("message", commentMessage);
     commentEntity.setProperty("votes", 0);
 
-    //Put entity into datastore
+    // Put entity into datastore.
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(commentEntity);
   }

@@ -12,13 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.google.sps.servlets;
+package com.google.sps.comments;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
+import com.google.sps.COMMONS;
+import com.google.sps.auth.AuthServlet;
+
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -31,25 +34,28 @@ public class VoteCommentServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    // Retrieve commentId from the request
-    long commentId = Long.parseLong(request.getParameter("commentId"));
-    boolean typeOfVote = Boolean.parseBoolean(request.getParameter("vote"));
-    
-    //If key dows not exists, catch the error
-    try{
-      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-      Key commentEntityKey = KeyFactory.createKey("Comment", commentId);
-      Entity comment = datastore.get(commentEntityKey);
+    if (AuthServlet.hasUserNicknameSet()) {
+      // Retrieve commentId from the request
+      long commentId = Long.parseLong(request.getParameter("commentId"));
+      boolean typeOfVote = Boolean.parseBoolean(request.getParameter("vote"));
 
-      //Updates the entity by creating a new one and override it at datastore
-      long numberOfVotes = (long) comment.getProperty("votes");
-      //Add or subtract vote
-      numberOfVotes = (typeOfVote) ? numberOfVotes + 1 : numberOfVotes - 1;
-      comment.setProperty("votes", numberOfVotes);
-      datastore.put(comment);
-    }catch(com.google.appengine.api.datastore.EntityNotFoundException e){
-      System.out.println(e);
+      // If key does not exist, catch the error.
+      try {
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        Key commentEntityKey = KeyFactory.createKey("Comment", commentId);
+        Entity comment = datastore.get(commentEntityKey);
+
+        // Updates the entity by creating a new one and override it at datastore.
+        long numberOfVotes = (long) comment.getProperty("votes");
+        // Add or subtract vote.
+        numberOfVotes = (typeOfVote) ? numberOfVotes + 1 : numberOfVotes - 1;
+        comment.setProperty("votes", numberOfVotes);
+        datastore.put(comment);
+      } catch(com.google.appengine.api.datastore.EntityNotFoundException e){
+        System.out.println(e);
+      }
+    } else {
+      response.sendRedirect(COMMONS.AUTH_URL);
     }
-    
   }
 }
