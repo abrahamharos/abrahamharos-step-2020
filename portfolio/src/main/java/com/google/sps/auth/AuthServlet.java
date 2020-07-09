@@ -22,9 +22,8 @@ import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.Gson;
-import com.google.sps.auth.User;
+import com.google.sps.COMMONS;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -33,27 +32,44 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/auth")
 public class AuthServlet extends HttpServlet {
 
+  /**
+   * doGet method returns the user data when user is registered (has a nickname).
+   * if the user does not have a nickname, the servlet return a temporal user
+   * with the login URL and the auth status
+   */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    response.setContentType("text/html");
-    PrintWriter out = response.getWriter();
+    response.setContentType("text/json");
 
     UserService userService = UserServiceFactory.getUserService();
     if (userService.isUserLoggedIn()) {
-      String username = getUserName(userService.getCurrentUser().getUserId());
-      String logoutUrl = userService.createLogoutURL("/auth");
-      printRegistrationPage(out, username, logoutUrl);
+      if (hasUserNicknameSet()) {
+        // If user is completely registered return user's data.
+        User user = getUserData();
+        user.setAuthStatus("hasNickname");
+        response.getWriter().println(userToJson(user));
+      } else {
+        // If user is logged in but not registered return auth status.
+        String userUrl = userService.createLogoutURL(COMMONS.AUTH_URL);
+        String userId = userService.getCurrentUser().getUserId();
+
+        User tempUser = new User(userId, null, userUrl, "loggedIn");
+        response.getWriter().println(userToJson(tempUser));
+      }
     } else {
-      String loginUrl = userService.createLoginURL("/auth");
-      printLoginPage(out, loginUrl);
+      // If user is logged out, return the log in url.
+      String userUrl = userService.createLoginURL(COMMONS.AUTH_URL);
+      User tempUser = new User(null, null, userUrl, "loggedOut");
+      response.getWriter().println(userToJson(tempUser));
     }
+
   }
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     UserService userService = UserServiceFactory.getUserService();
     if (!userService.isUserLoggedIn()) {
-      response.sendRedirect("/auth");
+      response.sendRedirect(COMMONS.AUTH_URL);
       return;
     }
 
@@ -64,9 +80,9 @@ public class AuthServlet extends HttpServlet {
     Entity entity = new Entity("UserInfo", id);
     entity.setProperty("id", id);
     entity.setProperty("username", username);
-    // The put() function automatically inserts new data or updates existing data based on ID
+    // The put() function automatically inserts new data or updates existing data based on ID.
     datastore.put(entity);
-    response.sendRedirect("/index.html");
+    response.sendRedirect(COMMONS.INDEX_PAGE);
   }
 
   /**
@@ -79,40 +95,12 @@ public class AuthServlet extends HttpServlet {
                     .setFilter(new Query.FilterPredicate("id", Query.FilterOperator.EQUAL, id));
     PreparedQuery results = datastore.prepare(query);
     Entity entity = results.asSingleEntity();
-    if (entity == null) {
-      return "";
-    }
+    if (entity == null) return null;
     return (String) entity.getProperty("username");
   }
 
-  /* Prints the html body of the login page */
-  private void printLoginPage(PrintWriter out, String loginUrl) {
-    out.println("<link rel=\"stylesheet\" href=\"style.css\">");
-    out.println("<div id=\"content\">");
-    out.println("<header><h1>Authentication page</h1></header>");
-    out.println("<article>");
-    out.println("<p>Welcome to Abraham Haros' portfolio, In order to access the content, please login bellow.</p>");
-    out.println("<a href=\"" + loginUrl + "\" class=\"btn\">Click here to log in.</a>");
-    out.println("</article></div>");
-  }
-
-  private void printRegistrationPage(PrintWriter out, String username, String logoutUrl) {
-    out.println("<link rel=\"stylesheet\" href=\"style.css\">");
-    out.println("<div id=\"content\">");
-    out.println("<header><h1>Registration page</h1></header>");
-    out.println("<article>");
-    out.println("<p>Welcome to Abraham Haros' portfolio, In order to access the content, please register your" +
-            " username bellow.</p>");
-    out.println("<form method=\"POST\" action=\"/auth\">");
-    out.println("<input class=\"text-input\" name=\"username\" value=\"" + username + "\" placeholder=\"Username\" />");
-    out.println("<input type=\"submit\" value=\"Submit\" class=\"btn\">");
-    out.println("</form>");
-    out.println("<a href=\"" + logoutUrl + "\" class=\"btn\">Click here to log out.</a>");
-    out.println("</article></div>");
-  }
-
-  /* Function that returns if a user is registered */
-  public static boolean isRegistered() {
+  // Function that returns if a user is registered.
+  public static boolean hasUserNicknameSet() {
     UserService userService = UserServiceFactory.getUserService();
 
     if (!userService.isUserLoggedIn()) return false;
@@ -121,5 +109,31 @@ public class AuthServlet extends HttpServlet {
     // User is logged in and has a nickname, so the request can proceed
     String nickname = getUserName(userService.getCurrentUser().getUserId());
     return nickname != null;
+  }
+
+  // Converts User object to JSON.
+  private String userToJson(User userData){
+    Gson gson = new Gson();
+    return gson.toJson(userData);
+  }
+
+  // Function that returns user data in Json format.
+  public static User getUserData() {
+    // Initialize userService and Datastore to retrieve user data.
+    UserService userService = UserServiceFactory.getUserService();
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    String id = userService.getCurrentUser().getUserId();
+
+    Query query =
+            new Query("UserInfo")
+                    .setFilter(new Query.FilterPredicate("id", Query.FilterOperator.EQUAL, id));
+    PreparedQuery results = datastore.prepare(query);
+    Entity entity = results.asSingleEntity();
+
+    // Creates User Object to return user's information.
+    String userId = (String) entity.getProperty("id");
+    String userName = (String) entity.getProperty("username");
+    String userUrl = userService.createLogoutURL(COMMONS.AUTH_URL);
+    return new User(userId, userName, userUrl, null);
   }
 }

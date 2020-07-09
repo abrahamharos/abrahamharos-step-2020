@@ -27,6 +27,13 @@ public final class Comment {
   private long votes;
   private final boolean postedBySameUser;
 
+/**
+ * Comment constructor
+ * @param id Comment id retrieved from datastore
+ * @param username  name of the user that posted the comment
+ * @param votes number of votes of the comment
+ * @param postedBySameUser determines if the user that is logged in posted this particular comment.
+ * **/
   public Comment(long id, Date datePosted, String username, String userId, String message, long votes, boolean postedBySameUser) {
     this.datePosted = datePosted;
     this.username = username;

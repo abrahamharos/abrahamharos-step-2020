@@ -183,35 +183,68 @@ const voteComment = (commentId, typeOfVote) => {
 };
 
 /**
- * Retrieves user data when page loads.
+ * Retrieves user's data and auth status
+ * There exists three cases, when user is logged out (show log in button)
+ * user logged in but has no nickname set (show register nickname form)
+ * and when user has a nickname and is logged in. This method handles
+ * this three cases by fetching results from the AuthServlet
  */
 const getUserData = () => {
-  fetch('/getUser'
-  ).then(response => {
-    if (response.redirected) {
-      window.location.href = response.url;
+  fetch('/auth').then(response => response.json()).then((userData) => {
+    const userContainerElement = document.getElementById('user-container');
+    // Clean element.
+    userContainerElement.innerHTML = '';
+
+    if(userData.authStatus === "hasNickname") {
+      const nameElement = document.createElement('p');
+      const logoutElement = document.createElement('a');
+
+      // Insert user data into HTML body.
+      nameElement.innerHTML = 'Hi ' + userData.name + '!';
+      userContainerElement.appendChild(nameElement);
+      logoutElement.setAttribute('href', userData.url);
+      logoutElement.innerHTML = 'Click here to logout!';
+      userContainerElement.appendChild(logoutElement);
+
+      // Once the user is registed, show the comment section
+      getComments();
+    } else if (userData.authStatus === "loggedIn"){
+      const loginMessageElement = document.createElement('p');
+      loginMessageElement.innerHTML = 'Please register your nickname bellow ' +
+          'to access the comment section';
+      userContainerElement.appendChild(loginMessageElement);
+
+      const formElement = document.createElement('form');
+      formElement.setAttribute('method', 'POST');
+      formElement.setAttribute('action', '/auth');
+
+      const nameInputElement = document.createElement('input');
+      nameInputElement.setAttribute('class', 'text-input');
+      nameInputElement.setAttribute('name', 'username');
+      nameInputElement.setAttribute('placeholder', 'username');
+
+      const submitButtonElement = document.createElement('input');
+      submitButtonElement.setAttribute('type', 'submit');
+      submitButtonElement.setAttribute('value', 'Register');
+      submitButtonElement.setAttribute('class', 'btn');
+
+      formElement.appendChild(nameInputElement);
+      formElement.appendChild(submitButtonElement);
+
+      userContainerElement.appendChild(formElement);
     } else {
-      response.json().then((userData) => {
-        const userContainerElement = document.getElementById('user-container');
-        const nameElement = document.createElement('p');
-        const logoutElement = document.createElement('a');
-
-        // Clean element
-        userContainerElement.innerHTML = '';
-
-        //Insert user data into HTML body
-        nameElement.innerHTML = 'Hi ' + userData.name + '!';
-        userContainerElement.appendChild(nameElement);
-        logoutElement.setAttribute('href', userData.logoutUrl);
-        logoutElement.innerHTML = 'Click here to logout!';
-        userContainerElement.appendChild(logoutElement);
-      });
+      // Insert user data into HTML body
+      const loginMessageElement = document.createElement('h3');
+      loginMessageElement.innerHTML = 'Please log in to see the comment section';
+      userContainerElement.appendChild(loginMessageElement);
+      logoutElement.setAttribute('href', userData.url);
+      logoutElement.innerHTML = 'Click here to log in';
+      userContainerElement.appendChild(logoutElement);
     }
   });
-}
+};
 
 // Retrieve comments and user's data when page is loaded
 window.onload = () => {
   getUserData();
-  getComments();
 };

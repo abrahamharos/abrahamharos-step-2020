@@ -14,10 +14,9 @@
 
 package com.google.sps.comments;
 
+import com.google.sps.COMMONS;
 import com.google.sps.auth.AuthServlet;
-import com.google.sps.auth.GetUserServlet;
 import com.google.sps.auth.User;
-import com.google.sps.comments.Comment;
 import com.google.gson.Gson;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -26,7 +25,7 @@ import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
-import com.google.appengine.api.datastore.Key;
+
 import java.io.IOException;
 import java.util.Date;
 import java.util.ArrayList;
@@ -46,19 +45,19 @@ public class ListCommentsServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    if (AuthServlet.isRegistered()) {
+    if (AuthServlet.hasUserNicknameSet()) {
       numberOfComments =  Integer.parseInt(request.getParameter("numberOfComments"));
       orderBy = (String) request.getParameter("orderBy");
 
       retrieveComments();
-      //Convert the array of comments retrieved to JSON
+      // Convert the array of comments retrieved to JSON.
       String json = convertCommentsToJson();
 
-      // Send the JSON as the response
+      // Send the JSON as the response.
       response.setContentType("application/json;");
       response.getWriter().println(json);
     } else {
-      response.sendRedirect("/auth");
+      response.sendRedirect(COMMONS.AUTH_URL);
     }
   }
 
@@ -74,10 +73,10 @@ public class ListCommentsServlet extends HttpServlet {
    * Retrieve comments from datastore
    */
   private void retrieveComments() {
-    //Clean comments array
+    // Clean comments array.
     comments.clear();
     
-    //Prepares query that will retrieve comments and sort comment depending on user's preferences
+    // Prepares query that will retrieve comments and sort comment depending on user's preferences.
     Query query = new Query("Comment");
     if (orderBy.equals("popular")) {
       query.addSort("votes", SortDirection.DESCENDING);
@@ -85,15 +84,15 @@ public class ListCommentsServlet extends HttpServlet {
       query.addSort("timestamp", SortDirection.DESCENDING);
     }
 
-    //Execute query
+    // Execute query.
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
-    User user = GetUserServlet.getUserData();
-    //Applies limit in the number of comments
+    User user = AuthServlet.getUserData();
+    // Applies limit in the number of comments.
     List<Entity> resultsLimited = results.asList(FetchOptions.Builder.withLimit(numberOfComments));
 
     for (Entity entity : resultsLimited) {
-      //Reads data from an entity
+      // Reads data from an entity.
       long commentId = entity.getKey().getId();
       String commentUsername = (String) entity.getProperty("username");
       String commentUserId = (String) entity.getProperty("userId");
@@ -101,10 +100,10 @@ public class ListCommentsServlet extends HttpServlet {
       String commentMessage = (String) entity.getProperty("message");
       long votes = (long) entity.getProperty("votes");
 
-      //check if the comment is posted by the same user logged in
+      // Check if the comment is posted by the same user logged in.
       boolean postedBySameUser = user.getId().equals(commentUserId) ? true : false;
 
-      //Add new comment to the array list
+      // Add new comment to the array list.
       comments.add(new Comment(commentId, commentTimestamp, commentUsername, commentUserId, commentMessage, votes, postedBySameUser));
     }
   }

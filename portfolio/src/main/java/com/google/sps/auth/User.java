@@ -17,12 +17,14 @@ package com.google.sps.auth;
 public final class User {
   private final String id;
   private final String name;
-  private final String logoutUrl;
+  private String url;
+  private String authStatus;
 
-  public User(String id, String name, String logoutUrl) {
+  public User(String id, String name, String url, String authStatus) {
     this.id = id;
     this.name = name;
-    this.logoutUrl = logoutUrl;
+    this.url = url;
+    this.authStatus = authStatus;
   }
 
   public String getId() {
@@ -33,7 +35,7 @@ public final class User {
     return name;
   }
 
-  public String getLogoutUrl() {
-    return logoutUrl;
+  public void setAuthStatus(String authStatus) {
+    this.authStatus = authStatus;
   }
 }
