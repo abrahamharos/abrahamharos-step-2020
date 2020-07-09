@@ -39,17 +39,15 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/list-comments")
 public class ListCommentsServlet extends HttpServlet {
 
-  private List<Comment> comments = new ArrayList<>();
-
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     if (AuthServlet.hasUserNicknameSet()) {
       int numberOfComments =  Integer.parseInt(request.getParameter("numberOfComments"));
       String orderBy = (String) request.getParameter("orderBy");
 
-      retrieveComments(numberOfComments, orderBy);
+      List<Comment> comments = retrieveComments(numberOfComments, orderBy);
       // Convert the array of comments retrieved to JSON.
-      String json = convertCommentsToJson();
+      String json = convertCommentsToJson(comments);
 
       // Send the JSON as the response.
       response.setContentType("application/json;");
@@ -62,7 +60,7 @@ public class ListCommentsServlet extends HttpServlet {
   /**
    * Converts a Comments instance into a JSON string using the Gson library.
    */
-  private String convertCommentsToJson() {
+  private String convertCommentsToJson(List<Comment> comments) {
     Gson gson = new Gson();
     return gson.toJson(comments);
   }
@@ -70,9 +68,8 @@ public class ListCommentsServlet extends HttpServlet {
   /**
    * Retrieve comments from datastore
    */
-  private void retrieveComments(int numberOfComments, String orderBy) {
-    // Clean comments array.
-    comments.clear();
+  private List<Comment> retrieveComments(int numberOfComments, String orderBy) {
+    List<Comment> comments = new ArrayList<>();
     
     // Prepares query that will retrieve comments and sort comment depending on user's preferences.
     Query query = new Query("Comment");
@@ -104,5 +101,6 @@ public class ListCommentsServlet extends HttpServlet {
       // Add new comment to the array list.
       comments.add(new Comment(commentId, commentTimestamp, commentUsername, commentUserId, commentMessage, votes, postedBySameUser));
     }
+    return comments;
   }
 }
