@@ -26,6 +26,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import com.google.cloud.language.v1.Document;
+import com.google.cloud.language.v1.LanguageServiceClient;
+import com.google.cloud.language.v1.Sentiment;
 
 /**Servlet that inserts a comment in datastore*/
 @WebServlet("/new-comment")
@@ -47,7 +50,7 @@ public class NewCommentServlet extends HttpServlet {
   /**
    * Retrieve data from the webpage's form
    */
-  private void addNewComment(HttpServletRequest request) {
+  private void addNewComment(HttpServletRequest request) throws IOException {
     // Get input values from the form.
     String commentMessage = request.getParameter("message");
     Date time = new Date();
@@ -61,8 +64,25 @@ public class NewCommentServlet extends HttpServlet {
     commentEntity.setProperty("message", commentMessage);
     commentEntity.setProperty("votes", 0);
 
+    // Determine if a sentiment is good, bad or neutal (based on API's documentation scale).
+    double sentiment = sentimentAnalyzer(commentMessage);
+    COMMONS.opinion commentOpinion;
+    if (sentiment >= 0.5) commentOpinion = COMMONS.opinion.GOOD;
+    else if(sentiment <= -0.5) commentOpinion = COMMONS.opinion.BAD;
+    else commentOpinion = COMMONS.opinion.NEUTRAL;
+
+    commentEntity.setProperty("opinion", commentOpinion);
+
     // Put entity into datastore.
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(commentEntity);
+  }
+
+  // Analyze the overall sentiment of the comment message
+  private double sentimentAnalyzer(String commentMessage) throws IOException {
+    try (LanguageServiceClient languageService = LanguageServiceClient.create()) {
+      Document document = Document.newBuilder().setContent(commentMessage).setType(Document.Type.PLAIN_TEXT).build();
+      return (double) languageService.analyzeSentiment(document).getDocumentSentiment().getScore();
+    }
   }
 }

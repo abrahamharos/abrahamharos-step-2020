@@ -15,6 +15,7 @@
 package com.google.sps.comments;
 
 import java.util.Date;
+import com.google.sps.COMMONS;
 
 /** Class containing comment Object. */
 public final class Comment {
@@ -26,6 +27,7 @@ public final class Comment {
   private final long id;
   private long votes;
   private final boolean postedBySameUser;
+  private COMMONS.opinion commentOpinion;
 
 /**
  * Comment constructor
@@ -33,8 +35,10 @@ public final class Comment {
  * @param username  name of the user that posted the comment
  * @param votes number of votes of the comment
  * @param postedBySameUser determines if the user that is logged in posted this particular comment.
+ * @param opinion the overall opinion of the website
  * **/
-  public Comment(long id, Date datePosted, String username, String userId, String message, long votes, boolean postedBySameUser) {
+  public Comment(long id, Date datePosted, String username, String userId, String message, long votes,
+                 boolean postedBySameUser, COMMONS.opinion commentOpinion) {
     this.datePosted = datePosted;
     this.username = username;
     this.userId = userId;
@@ -42,6 +46,7 @@ public final class Comment {
     this.id = id;
     this.votes = votes;
     this.postedBySameUser = postedBySameUser;
+    this.commentOpinion = commentOpinion;
   }
 
   public Date getDatePosted() {
