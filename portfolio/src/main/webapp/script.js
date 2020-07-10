@@ -124,11 +124,11 @@ const appendComments = (comments, commentContainerElement) => {
     const sentimentElement = document.createElement('div');
     sentimentElement.classList.add('sentiment');
     if (comment.sentiment >= 0.5) {
-      sentimentElement.innerHTML = 'Good';
-      sentimentElement.classList.add('good');
+      sentimentElement.innerHTML = 'Happy';
+      sentimentElement.classList.add('happy');
     } else if (comment.sentiment <= -0.5) {
-      sentimentElement.innerHTML = 'Bad';
-      sentimentElement.classList.add('bad');
+      sentimentElement.innerHTML = 'Angry';
+      sentimentElement.classList.add('angry');
     } else {
       sentimentElement.innerHTML = 'Neutral';
       sentimentElement.classList.add('neutral');

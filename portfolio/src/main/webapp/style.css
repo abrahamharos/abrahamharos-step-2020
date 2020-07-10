@@ -175,6 +175,8 @@ article h3{
   font-size: small;
   font-weight: 700;
   padding: 5px;
+  margin-right: 10px;
+
 }
 
 .comment .sentiment {
@@ -186,11 +188,11 @@ article h3{
   padding: 5px;
 }
 
-.good {
+.happy {
   background-color: #3fb553;
 }
 
-.bad {
+.angry {
   background-color: #b53f4f;
 }
 
