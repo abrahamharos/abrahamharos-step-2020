@@ -177,6 +177,27 @@ article h3{
   padding: 5px;
 }
 
+.comment .sentiment {
+  border-radius: 10px;
+  color: white;
+  display: inline;
+  font-size: small;
+  font-weight: 700;
+  padding: 5px;
+}
+
+.good {
+  background-color: #3fb553;
+}
+
+.bad {
+  background-color: #b53f4f;
+}
+
+.neutral {
+  background-color: #707281;
+}
+
 .comment .trash-icon {
   float: right;
   margin-right: 5%;

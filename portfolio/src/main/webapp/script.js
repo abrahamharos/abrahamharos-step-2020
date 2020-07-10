@@ -73,7 +73,6 @@ const getComments = () => {
 const appendComments = (comments, commentContainerElement) => {
   Object.keys(comments).forEach(commentId => {
     const comment = comments[commentId];
-    console.log(comment.sentiment);
     // Create each element with its properties
     const userElement = document.createElement('h3');
     userElement.innerHTML = comment.username;
@@ -122,6 +121,19 @@ const appendComments = (comments, commentContainerElement) => {
     datePostedElement.innerHTML = comment.datePosted;
     datePostedElement.classList.add('date');
 
+    const sentimentElement = document.createElement('div');
+    sentimentElement.classList.add('sentiment');
+    if (comment.sentiment >= 0.5) {
+      sentimentElement.innerHTML = 'Good';
+      sentimentElement.classList.add('good');
+    } else if (comment.sentiment <= -0.5) {
+      sentimentElement.innerHTML = 'Bad';
+      sentimentElement.classList.add('bad');
+    } else {
+      sentimentElement.innerHTML = 'Neutral';
+      sentimentElement.classList.add('neutral');
+    }
+
     const commentElement = document.createElement('div');
     commentElement.classList.add('comment');
     const trashIconElement = document.createElement('i');
@@ -145,6 +157,7 @@ const appendComments = (comments, commentContainerElement) => {
     commentElement.appendChild(votesContainerElement);
     commentElement.appendChild(messageElement);
     commentElement.appendChild(datePostedElement);
+    commentElement.appendChild(sentimentElement);
     if (comment.postedBySameUser) {
       commentElement.appendChild(trashElement);
     }
