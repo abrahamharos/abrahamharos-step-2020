@@ -123,10 +123,10 @@ const appendComments = (comments, commentContainerElement) => {
 
     const sentimentElement = document.createElement('div');
     sentimentElement.classList.add('sentiment');
-    if (comment.sentiment >= 0.5) {
+    if (comment.sentimentScore >= 0.5) {
       sentimentElement.innerHTML = 'Happy';
       sentimentElement.classList.add('happy');
-    } else if (comment.sentiment <= -0.5) {
+    } else if (comment.sentimentScore <= -0.5) {
       sentimentElement.innerHTML = 'Angry';
       sentimentElement.classList.add('angry');
     } else {

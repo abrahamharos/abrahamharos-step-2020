@@ -65,9 +65,9 @@ public class NewCommentServlet extends HttpServlet {
     commentEntity.setProperty("votes", 0);
 
     // Determine the sentiment score of the comment
-    double sentiment = sentimentAnalyzer(commentMessage);
+    double sentimentScore = sentimentAnalyzer(commentMessage);
 
-    commentEntity.setProperty("sentiment", sentiment);
+    commentEntity.setProperty("sentimentScore", sentimentScore);
 
     // Put entity into datastore.
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
