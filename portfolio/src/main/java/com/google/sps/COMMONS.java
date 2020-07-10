@@ -9,7 +9,4 @@ public interface COMMONS {
   enum authStatus {
     LOGGED_IN, LOGGED_OUT, HAS_NICKNAME
   }
-  enum opinion {
-   GOOD, NEUTRAL, BAD
-  }
 }

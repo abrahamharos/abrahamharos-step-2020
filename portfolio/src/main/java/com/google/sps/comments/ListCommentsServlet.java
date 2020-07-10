@@ -95,14 +95,14 @@ public class ListCommentsServlet extends HttpServlet {
       Date commentTimestamp = (Date) entity.getProperty("timestamp");
       String commentMessage = (String) entity.getProperty("message");
       long votes = (long) entity.getProperty("votes");
-      COMMONS.opinion commentOpinion = (COMMONS.opinion) entity.getProperty("opinion");
+      double commentSentiment = (double) entity.getProperty("opinion");
 
       // Check if the comment is posted by the same user logged in.
       boolean postedBySameUser = user.getId().equals(commentUserId) ? true : false;
 
       // Add new comment to the array list.
       comments.add(new Comment(commentId, commentTimestamp, commentUsername, commentUserId,
-              commentMessage, votes, postedBySameUser, commentOpinion));
+              commentMessage, votes, postedBySameUser, commentSentiment));
     }
     return comments;
   }

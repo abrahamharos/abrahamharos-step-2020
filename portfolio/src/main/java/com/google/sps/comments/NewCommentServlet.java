@@ -64,14 +64,10 @@ public class NewCommentServlet extends HttpServlet {
     commentEntity.setProperty("message", commentMessage);
     commentEntity.setProperty("votes", 0);
 
-    // Determine if a sentiment is good, bad or neutal (based on API's documentation scale).
+    // Determine the sentiment score of the comment
     double sentiment = sentimentAnalyzer(commentMessage);
-    COMMONS.opinion commentOpinion;
-    if (sentiment >= 0.5) commentOpinion = COMMONS.opinion.GOOD;
-    else if(sentiment <= -0.5) commentOpinion = COMMONS.opinion.BAD;
-    else commentOpinion = COMMONS.opinion.NEUTRAL;
 
-    commentEntity.setProperty("opinion", commentOpinion);
+    commentEntity.setProperty("sentiment", sentiment);
 
     // Put entity into datastore.
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();

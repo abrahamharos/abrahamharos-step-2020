@@ -27,7 +27,7 @@ public final class Comment {
   private final long id;
   private long votes;
   private final boolean postedBySameUser;
-  private COMMONS.opinion commentOpinion;
+  private double sentiment;
 
 /**
  * Comment constructor
@@ -38,7 +38,7 @@ public final class Comment {
  * @param opinion the overall opinion of the website
  * **/
   public Comment(long id, Date datePosted, String username, String userId, String message, long votes,
-                 boolean postedBySameUser, COMMONS.opinion commentOpinion) {
+                 boolean postedBySameUser, double sentiment) {
     this.datePosted = datePosted;
     this.username = username;
     this.userId = userId;
@@ -46,7 +46,7 @@ public final class Comment {
     this.id = id;
     this.votes = votes;
     this.postedBySameUser = postedBySameUser;
-    this.commentOpinion = commentOpinion;
+    this.sentiment = sentiment;
   }
 
   public Date getDatePosted() {

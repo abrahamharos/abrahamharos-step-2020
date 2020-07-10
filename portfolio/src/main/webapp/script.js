@@ -73,7 +73,7 @@ const getComments = () => {
 const appendComments = (comments, commentContainerElement) => {
   Object.keys(comments).forEach(commentId => {
     const comment = comments[commentId];
-    console.log(comment.opinion);
+    console.log(comment.sentiment);
     // Create each element with its properties
     const userElement = document.createElement('h3');
     userElement.innerHTML = comment.username;
