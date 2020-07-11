@@ -39,9 +39,6 @@ public class NewCommentServlet extends HttpServlet {
     if (AuthServlet.hasUserNicknameSet()) {
       // Insert new comment into the array list.
       addNewComment(request);
-
-      // Redirect back to the HTML page.
-      response.sendRedirect(COMMONS.INDEX_PAGE);
     } else {
       response.sendRedirect(COMMONS.AUTH_URL);
     }
@@ -77,8 +74,14 @@ public class NewCommentServlet extends HttpServlet {
   // Analyze the overall sentiment of the comment message
   private double sentimentAnalyzer(String commentMessage) throws IOException {
     try (LanguageServiceClient languageService = LanguageServiceClient.create()) {
-      Document document = Document.newBuilder().setContent(commentMessage).setType(Document.Type.PLAIN_TEXT).build();
-      return (double) languageService.analyzeSentiment(document).getDocumentSentiment().getScore();
+      Document document = Document.newBuilder()
+              .setContent(commentMessage)
+              .setType(Document.Type.PLAIN_TEXT)
+              .build();
+      return (double) languageService
+              .analyzeSentiment(document)
+              .getDocumentSentiment()
+              .getScore();
     }
   }
 }

@@ -15,7 +15,6 @@
 package com.google.sps.comments;
 
 import java.util.Date;
-import com.google.sps.COMMONS;
 
 /** Class containing comment Object. */
 public final class Comment {

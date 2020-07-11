@@ -7,6 +7,11 @@
     <script src="script.js"></script>
     <!-- Font Awesome icons -->
     <script src="https://use.fontawesome.com/324fa1613b.js"></script>
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
   </head>
   <body>
     <div id="content">
@@ -28,10 +33,8 @@
       <article id="comments">
         <h2>Comment section</h2>
         <h3>Feel free to leave a comment!</h3>
-        <form action="/new-comment" method="POST">
-          <textarea class="text" name="message" placeholder="Message"></textarea>
-          <input type="submit" value="Submit" class="btn">
-        </form>
+        <textarea id="comment-message" class="text" name="message" placeholder="Message"></textarea>
+        <input type="submit" value="Submit" class="button" onClick="postComment()">
         <div class="number-comments">
           <p>Select the type and the number of comments you want to see:</p>
           <select class="select-input" name="typeOfComments" id="typeOfComments">
@@ -39,7 +42,7 @@
             <option value="recent">Recent comments</option>
           </select>
           <input class="number-input" type="number" id="numberOfComments" name="numberOfComments" value="5" min="1"></input>
-          <input type="submit" value="Fetch comments" class="btn" onClick="getComments()">
+          <input type="submit" value="Fetch comments" class="button" onClick="getComments()">
         </div>
         <div id="comment-container"></div>
       </article>
@@ -215,9 +218,28 @@
       </article>
       <article id="randomFacts">
         <h2>Fun facts</h2>
-        <button class="btn" id="btn-fact" type="button" onClick="addRandomFact()">Click here to get a random fact about me!</button>
+        <button class="button" id="btn-fact" type="button" onClick="addRandomFact()">Click here to get a random fact about me!</button>
         <p id="randomFact"></p>
       </article>
+      <!-- Error Message Modal -->
+      <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="errorModalLongTitle">An error has occurred</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body" id="error-message">
+              Error message.
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </body>
 </html>
