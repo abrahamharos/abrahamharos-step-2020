@@ -49,7 +49,7 @@ public class NewCommentServlet extends HttpServlet {
    */
   private void addNewComment(HttpServletRequest request) throws IOException {
     // Get input values from the form.
-    String commentMessage = request.getParameter("message");
+    String commentMessage = request.getParameter("commentMessage");
     Date time = new Date();
     User user = AuthServlet.getUserData();
 
