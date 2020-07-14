@@ -28,7 +28,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.google.cloud.language.v1.Document;
 import com.google.cloud.language.v1.LanguageServiceClient;
-import com.google.cloud.language.v1.Sentiment;
 
 /**Servlet that inserts a comment in datastore*/
 @WebServlet("/new-comment")
@@ -62,7 +61,7 @@ public class NewCommentServlet extends HttpServlet {
     commentEntity.setProperty("votes", 0);
 
     // Determine the sentiment score of the comment
-    double sentimentScore = sentimentAnalyzer(commentMessage);
+    double sentimentScore = getSentimentScore(commentMessage);
 
     commentEntity.setProperty("sentimentScore", sentimentScore);
 
@@ -72,7 +71,7 @@ public class NewCommentServlet extends HttpServlet {
   }
 
   // Analyze the overall sentiment of the comment message
-  private double sentimentAnalyzer(String commentMessage) throws IOException {
+  private double getSentimentScore(String commentMessage) throws IOException {
     try (LanguageServiceClient languageService = LanguageServiceClient.create()) {
       Document document = Document.newBuilder()
               .setContent(commentMessage)
