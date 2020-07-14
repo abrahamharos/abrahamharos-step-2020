@@ -25,7 +25,6 @@ import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
-
 import java.io.IOException;
 import java.util.Date;
 import java.util.ArrayList;
@@ -50,7 +49,8 @@ public class ListCommentsServlet extends HttpServlet {
       String json = convertCommentsToJson(comments);
 
       // Send the JSON as the response.
-      response.setContentType("application/json;");
+      response.setContentType("application/json; charset=UTF-8");
+      response.setCharacterEncoding("UTF-8");
       response.getWriter().println(json);
     } else {
       response.sendRedirect(COMMONS.AUTH_URL);
@@ -94,12 +94,14 @@ public class ListCommentsServlet extends HttpServlet {
       Date commentTimestamp = (Date) entity.getProperty("timestamp");
       String commentMessage = (String) entity.getProperty("message");
       long votes = (long) entity.getProperty("votes");
+      double commentSentimentScore = (double) entity.getProperty("sentimentScore");
 
       // Check if the comment is posted by the same user logged in.
       boolean postedBySameUser = user.getId().equals(commentUserId) ? true : false;
 
       // Add new comment to the array list.
-      comments.add(new Comment(commentId, commentTimestamp, commentUsername, commentUserId, commentMessage, votes, postedBySameUser));
+      comments.add(new Comment(commentId, commentTimestamp, commentUsername, commentUserId,
+              commentMessage, votes, postedBySameUser, commentSentimentScore));
     }
     return comments;
   }

@@ -44,23 +44,31 @@ const getComments = () => {
       window.location.href = response.url;
       return;
     }
-    response.json().then((comments) => {
-      const commentContainerElement = document.getElementById('comment-container');
-      const titleElement = document.createElement('h2');
+    // Response status 200 = Servlet response OK
+    if (response.status === 200) {
+        response.json().then((comments) => {
+        const commentContainerElement = document.getElementById('comment-container');
+        const titleElement = document.createElement('h2');
 
-      // Clean element
-      commentContainerElement.innerHTML = '';
+        // Clean element
+        commentContainerElement.innerHTML = '';
 
-      // If no comments, display an alert, else append comments to the container element.
-      if (comments.length === 0) {
-        titleElement.innerHTML = "There are no comments 😕, be the first!";
-        commentContainerElement.appendChild(titleElement);
-      } else {
-        titleElement.innerHTML = "Last comments";
-        commentContainerElement.appendChild(titleElement);
-        appendComments(comments, commentContainerElement);
-      }
-    });
+        // If no comments, display an alert, else append comments to the container element.
+        if (comments.length === 0) {
+          titleElement.innerHTML = "There are no comments 😕, be the first!";
+          commentContainerElement.appendChild(titleElement);
+        } else {
+          titleElement.innerHTML = "Last comments";
+          commentContainerElement.appendChild(titleElement);
+          appendComments(comments, commentContainerElement);
+        }
+      });
+    } else {
+      // Show error message to the user.
+      let errorMessage = document.getElementById('error-message');
+      errorMessage.innerText = 'An error occurred retrieving comments, please try again.';
+      $('#errorModal').modal('show');
+    }
   });
 };
 
@@ -121,6 +129,19 @@ const appendComments = (comments, commentContainerElement) => {
     datePostedElement.innerHTML = comment.datePosted;
     datePostedElement.classList.add('date');
 
+    const sentimentElement = document.createElement('div');
+    sentimentElement.classList.add('sentiment');
+    if (comment.sentimentScore >= 0.5) {
+      sentimentElement.innerHTML = 'Happy';
+      sentimentElement.classList.add('happy');
+    } else if (comment.sentimentScore <= -0.5) {
+      sentimentElement.innerHTML = 'Angry';
+      sentimentElement.classList.add('angry');
+    } else {
+      sentimentElement.innerHTML = 'Neutral';
+      sentimentElement.classList.add('neutral');
+    }
+
     const commentElement = document.createElement('div');
     commentElement.classList.add('comment');
     const trashIconElement = document.createElement('i');
@@ -144,6 +165,7 @@ const appendComments = (comments, commentContainerElement) => {
     commentElement.appendChild(votesContainerElement);
     commentElement.appendChild(messageElement);
     commentElement.appendChild(datePostedElement);
+    commentElement.appendChild(sentimentElement);
     if (comment.postedBySameUser) {
       commentElement.appendChild(trashElement);
     }
@@ -162,7 +184,15 @@ const deleteComment = (commentId) => {
       window.location.href = response.url;
       return;
     }
-    getComments();
+    // Response status 200 = Servlet response OK
+    if (response.status === 200) {
+      getComments();
+    } else {
+      // Show error message to the user.
+      let errorMessage = document.getElementById('error-message');
+      errorMessage.innerText = 'An error occurred deleting the comment, please try again.';
+      $('#errorModal').modal('show');
+    }
   });
 };
 
@@ -178,7 +208,15 @@ const voteComment = (commentId, typeOfVote) => {
       window.location.href = response.url;
       return;
     }
-    getComments();
+    // Response status 200 = Servlet response OK
+    if (response.status === 200) {
+      getComments();
+    } else {
+      // Show error message to the user.
+      let errorMessage = document.getElementById('error-message');
+      errorMessage.innerText = 'An error occurred voting the comment, please try again.';
+      $('#errorModal').modal('show');
+    }
   });
 };
 
@@ -241,6 +279,31 @@ const getUserData = () => {
       loginElement.setAttribute('href', userData.url);
       loginElement.innerHTML = 'Click here to log in';
       userContainerElement.appendChild(loginElement);
+    }
+  });
+};
+
+/**
+ * Post a comment
+ */
+const postComment = () => {
+  const postParams = new URLSearchParams();
+  let commentMessage = document.getElementById("comment-message").value;
+  postParams.append('commentMessage', commentMessage);
+  fetch('/new-comment', {method: 'POST', body: postParams}).then(response => {
+    if (response.redirected) {
+      window.location.href = response.url;
+      return;
+    }
+    // Response status 200 = Servlet response OK
+    if (response.status === 200) {
+      getComments();
+      commentMessage = '';
+    } else {
+      // Show error message to the user.
+      let errorMessage = document.getElementById('error-message');
+      errorMessage.innerText = 'An error occurred posting the comment, please try again.';
+      $('#errorModal').modal('show');
     }
   });
 };

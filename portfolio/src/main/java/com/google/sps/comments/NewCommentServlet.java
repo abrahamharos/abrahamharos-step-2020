@@ -26,6 +26,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import com.google.cloud.language.v1.Document;
+import com.google.cloud.language.v1.LanguageServiceClient;
 
 /**Servlet that inserts a comment in datastore*/
 @WebServlet("/new-comment")
@@ -36,9 +38,6 @@ public class NewCommentServlet extends HttpServlet {
     if (AuthServlet.hasUserNicknameSet()) {
       // Insert new comment into the array list.
       addNewComment(request);
-
-      // Redirect back to the HTML page.
-      response.sendRedirect(COMMONS.INDEX_PAGE);
     } else {
       response.sendRedirect(COMMONS.AUTH_URL);
     }
@@ -47,9 +46,9 @@ public class NewCommentServlet extends HttpServlet {
   /**
    * Retrieve data from the webpage's form
    */
-  private void addNewComment(HttpServletRequest request) {
+  private void addNewComment(HttpServletRequest request) throws IOException {
     // Get input values from the form.
-    String commentMessage = request.getParameter("message");
+    String commentMessage = request.getParameter("commentMessage");
     Date time = new Date();
     User user = AuthServlet.getUserData();
 
@@ -61,8 +60,27 @@ public class NewCommentServlet extends HttpServlet {
     commentEntity.setProperty("message", commentMessage);
     commentEntity.setProperty("votes", 0);
 
+    // Determine the sentiment score of the comment
+    double sentimentScore = getSentimentScore(commentMessage);
+
+    commentEntity.setProperty("sentimentScore", sentimentScore);
+
     // Put entity into datastore.
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(commentEntity);
+  }
+
+  // Analyze the overall sentiment of the comment message
+  private double getSentimentScore(String commentMessage) throws IOException {
+    try (LanguageServiceClient languageService = LanguageServiceClient.create()) {
+      Document document = Document.newBuilder()
+              .setContent(commentMessage)
+              .setType(Document.Type.PLAIN_TEXT)
+              .build();
+      return (double) languageService
+              .analyzeSentiment(document)
+              .getDocumentSentiment()
+              .getScore();
+    }
   }
 }
