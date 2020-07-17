@@ -23,6 +23,14 @@ public final class FindMeetingQuery {
 
   private final int TOTAL_DAY_MINUTES = 60 * 24;
 
+  /**
+   * This function return the available time slots for attendees
+   * If there is not time slot with optional attendees, this will
+   * return only the time slots with mandatory attendees
+   * @param events List of events of every Person
+   * @param request Event requirements to meet the people
+   * @return List of time slots available.
+   */
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
     ArrayList<TimeRange> availableTimes;
 
@@ -30,33 +38,33 @@ public final class FindMeetingQuery {
     Boolean[] availableMinutesAttendees = new Boolean[TOTAL_DAY_MINUTES];
     Arrays.fill(availableMinutesAttendees, true);
 
-    Boolean[] availableMinutesOptAttendees = new Boolean[TOTAL_DAY_MINUTES];
-    Arrays.fill(availableMinutesOptAttendees, true);
+    Boolean[] optAvailableMinutesAttendees = new Boolean[TOTAL_DAY_MINUTES];
+    Arrays.fill(optAvailableMinutesAttendees, true);
 
     Collection<String> attendees = request.getAttendees();
-    Collection<String> optionalAttendees = request.getOptionalAttendees();
+    Collection<String> optAttendees = request.getOptionalAttendees();
 
     for (Event currentEvent: events) {
       Collection<String> eventAttendees = currentEvent.getAttendees();
 
       // Verify if requested attendees are in the current event.
       Boolean isAttendeeAtEvent = !Collections.disjoint(eventAttendees, attendees);
-      Boolean isOptAttendeeAtEvent = !Collections.disjoint(eventAttendees, optionalAttendees);
+      Boolean isOptAttendeeAtEvent = !Collections.disjoint(eventAttendees, optAttendees);
 
       int start = currentEvent.getWhen().start();
       int end = start + currentEvent.getWhen().duration();
 
       if (isAttendeeAtEvent) {
         Arrays.fill(availableMinutesAttendees, start, end, false);
-        Arrays.fill(availableMinutesOptAttendees, start, end, false);
+        Arrays.fill(optAvailableMinutesAttendees, start, end, false);
       } else if (isOptAttendeeAtEvent) {
-        Arrays.fill(availableMinutesOptAttendees, start, end, false);
+        Arrays.fill(optAvailableMinutesAttendees, start, end, false);
       }
     }
 
     // First, try to include optional attendees.
     long duration = request.getDuration();
-    availableTimes = computeAvailableTimes(availableMinutesOptAttendees, duration);
+    availableTimes = computeAvailableTimes(optAvailableMinutesAttendees, duration);
 
     // If there was no time slot available with optional attendees, return time available with mandatory attendees.
     return availableTimes.size() > 0 ? availableTimes : computeAvailableTimes(availableMinutesAttendees, duration);
