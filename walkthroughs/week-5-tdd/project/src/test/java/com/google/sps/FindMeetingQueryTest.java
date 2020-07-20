@@ -93,7 +93,7 @@ public final class FindMeetingQueryTest {
         Arrays.asList(TimeRange.fromStartEnd(TimeRange.START_OF_DAY, TIME_0830AM, false),
             TimeRange.fromStartEnd(TIME_0900AM, TimeRange.END_OF_DAY, true));
 
-    Assert.assertEquals(1, 1);
+    Assert.assertEquals(expected, actual);
   }
 
   @Test
@@ -336,7 +336,7 @@ public final class FindMeetingQueryTest {
 
   @Test
   public void noGapsOptAttendees() {
-    // Just two optional attendees with several gaps in their schedules.
+    // Just two optional attendees with no gaps in their schedules.
     // Optional: |--A--|--B--|----A----|
     // Events  :
     // Day     : |---------------------|
